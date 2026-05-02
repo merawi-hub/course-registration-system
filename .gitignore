@@ -1,0 +1,15 @@
+# Maven build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.class
+
+# Database credentials — DO NOT commit
+src/main/resources/db.properties
+
+# OS files
+.DS_Store
+Thumbs.db
