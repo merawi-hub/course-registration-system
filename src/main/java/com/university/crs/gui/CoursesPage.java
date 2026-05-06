@@ -149,7 +149,7 @@ public class CoursesPage {
     private TextField formField(String label, String prompt) {
         TextField f = new TextField();
         f.setPromptText(prompt);
-        LoginScreen.styleTextField(f);
+        StyleUtil.styleTextField(f);
         return f;
     }
 

@@ -114,13 +114,13 @@ public class StudentsPage {
         nameLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #555;");
         nameField = new TextField();
         nameField.setPromptText("Enter full name");
-        LoginScreen.styleTextField(nameField);
+        StyleUtil.styleTextField(nameField);
 
         Label emailLabel = new Label("Email");
         emailLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #555;");
         emailField = new TextField();
         emailField.setPromptText("Enter email");
-        LoginScreen.styleTextField(emailField);
+        StyleUtil.styleTextField(emailField);
 
         formMessage = new Label();
         formMessage.setWrapText(true);
