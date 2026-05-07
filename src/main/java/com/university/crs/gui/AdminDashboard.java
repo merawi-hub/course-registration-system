@@ -96,7 +96,7 @@ public class AdminDashboard {
         Button studentsBtn = navButton("👥", "Manage Students", false, () -> showPage(new StudentsPage(stage, user).build()));
         Button registrationsBtn = navButton("📋", "Registrations", false, () -> showPage(new EnrollmentsPage(stage, user).build()));
         Button reportsBtn = navButton("📊", "Reports", false, () -> showPage(new ReportsPage().build()));
-        Button profileBtn = navButton("👤", "Profile", false, () -> {});
+        Button profileBtn = navButton("👤", "Profile", false, () -> showPage(new ProfilePage(user).build()));
         Button logoutBtn = navButton("🚪", "Logout", false, () -> new LoginScreen(stage).show());
         
         navBox.getChildren().addAll(
