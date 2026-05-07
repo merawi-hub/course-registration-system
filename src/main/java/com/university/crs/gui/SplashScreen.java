@@ -63,7 +63,7 @@ public class SplashScreen {
         // Subtitle with Inter font
         Label subtitle = new Label("Smart way to register your future");
         subtitle.setFont(FontLoader.getInter(17));
-        subtitle.setTextFill(ColorScheme.LIGHT_BLUE);
+        subtitle.setTextFill(ColorScheme.WHITE);
         subtitle.setStyle("-fx-letter-spacing: 0.5px;");
 
         // Loading spinner
@@ -71,7 +71,7 @@ public class SplashScreen {
         Arc spinner = createSpinner();
         Label loadingText = new Label("Loading...");
         loadingText.setFont(FontLoader.getInter(15));
-        loadingText.setTextFill(ColorScheme.LIGHT_BLUE);
+        loadingText.setTextFill(ColorScheme.WHITE);
         loadingText.setStyle("-fx-letter-spacing: 1px;");
         
         VBox loadingBox = new VBox(18);
