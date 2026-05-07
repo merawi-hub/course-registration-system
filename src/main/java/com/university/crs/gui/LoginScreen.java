@@ -63,7 +63,7 @@ public class LoginScreen {
         section.setAlignment(Pos.CENTER);
         section.setPadding(new Insets(60, 50, 60, 50));
         section.setStyle(
-            "-fx-background-color: linear-gradient(to bottom right, #1a3a52, #2d5a7b); " +
+            "-fx-background-color: " + ColorScheme.GRADIENT_BLUE + "; " +
             "-fx-background-radius: 25 0 0 25;"
         );
 
@@ -123,7 +123,7 @@ public class LoginScreen {
         StackPane iconContainer = new StackPane();
         
         // Try to load image first
-        javafx.scene.image.ImageView imageView = ImageLoader.loadImage("graduation-hat.png", 100, 100);
+        javafx.scene.image.ImageView imageView = ImageLoader.loadImage("graduation-cap.png", 100, 100);
         
         if (imageView != null) {
             // Image loaded successfully
@@ -189,8 +189,8 @@ public class LoginScreen {
         TextField usernameField = new TextField();
         usernameField.setPromptText("Enter your username");
         usernameField.setStyle(
-            "-fx-background-color: #f8f9fa; " +
-            "-fx-border-color: #e0e0e0; " +
+            "-fx-background-color: " + ColorScheme.BACKGROUND_HEX + "; " +
+            "-fx-border-color: " + ColorScheme.SOFT_GRAY_HEX + "; " +
             "-fx-border-radius: 10; " +
             "-fx-background-radius: 10; " +
             "-fx-padding: 14 18; " +
@@ -205,7 +205,7 @@ public class LoginScreen {
             if (newVal) {
                 usernameField.setStyle(
                     "-fx-background-color: white; " +
-                    "-fx-border-color: #1a3a52; " +
+                    "-fx-border-color: " + ColorScheme.MEDIUM_BLUE_HEX + "; " +
                     "-fx-border-width: 2; " +
                     "-fx-border-radius: 10; " +
                     "-fx-background-radius: 10; " +
@@ -215,8 +215,8 @@ public class LoginScreen {
                 );
             } else {
                 usernameField.setStyle(
-                    "-fx-background-color: #f8f9fa; " +
-                    "-fx-border-color: #e0e0e0; " +
+                    "-fx-background-color: " + ColorScheme.BACKGROUND_HEX + "; " +
+                    "-fx-border-color: " + ColorScheme.SOFT_GRAY_HEX + "; " +
                     "-fx-border-radius: 10; " +
                     "-fx-background-radius: 10; " +
                     "-fx-padding: 14 18; " +
@@ -238,8 +238,8 @@ public class LoginScreen {
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Enter your password");
         passwordField.setStyle(
-            "-fx-background-color: #f8f9fa; " +
-            "-fx-border-color: #e0e0e0; " +
+            "-fx-background-color: " + ColorScheme.BACKGROUND_HEX + "; " +
+            "-fx-border-color: " + ColorScheme.SOFT_GRAY_HEX + "; " +
             "-fx-border-radius: 10; " +
             "-fx-background-radius: 10; " +
             "-fx-padding: 14 18; " +
@@ -254,7 +254,7 @@ public class LoginScreen {
             if (newVal) {
                 passwordField.setStyle(
                     "-fx-background-color: white; " +
-                    "-fx-border-color: #1a3a52; " +
+                    "-fx-border-color: " + ColorScheme.MEDIUM_BLUE_HEX + "; " +
                     "-fx-border-width: 2; " +
                     "-fx-border-radius: 10; " +
                     "-fx-background-radius: 10; " +
@@ -264,8 +264,8 @@ public class LoginScreen {
                 );
             } else {
                 passwordField.setStyle(
-                    "-fx-background-color: #f8f9fa; " +
-                    "-fx-border-color: #e0e0e0; " +
+                    "-fx-background-color: " + ColorScheme.BACKGROUND_HEX + "; " +
+                    "-fx-border-color: " + ColorScheme.SOFT_GRAY_HEX + "; " +
                     "-fx-border-radius: 10; " +
                     "-fx-background-radius: 10; " +
                     "-fx-padding: 14 18; " +
@@ -290,7 +290,7 @@ public class LoginScreen {
         
         Hyperlink forgotPassword = new Hyperlink("Forgot Password?");
         forgotPassword.setFont(FontLoader.getInter(13));
-        forgotPassword.setTextFill(Color.rgb(26, 58, 82));
+        forgotPassword.setTextFill(ColorScheme.MEDIUM_BLUE);
         forgotPassword.setStyle(
             "-fx-border-color: transparent; " +
             "-fx-padding: 0; " +
@@ -300,11 +300,11 @@ public class LoginScreen {
         
         // Hover effects
         forgotPassword.setOnMouseEntered(e -> {
-            forgotPassword.setTextFill(Color.rgb(45, 90, 123));
+            forgotPassword.setTextFill(ColorScheme.LIGHT_BLUE);
             forgotPassword.setUnderline(true);
         });
         forgotPassword.setOnMouseExited(e -> {
-            forgotPassword.setTextFill(Color.rgb(26, 58, 82));
+            forgotPassword.setTextFill(ColorScheme.MEDIUM_BLUE);
             forgotPassword.setUnderline(false);
         });
         
@@ -313,33 +313,33 @@ public class LoginScreen {
         // Error label
         Label errorLabel = new Label();
         errorLabel.setFont(FontLoader.getInter(13));
-        errorLabel.setStyle("-fx-text-fill: #dc3545; -fx-background-color: #f8d7da; -fx-padding: 10 15; -fx-background-radius: 8; -fx-border-color: #f5c6cb; -fx-border-radius: 8;");
+        errorLabel.setStyle("-fx-text-fill: " + ColorScheme.DANGER_HEX + "; -fx-background-color: #f8d7da; -fx-padding: 10 15; -fx-background-radius: 8; -fx-border-color: #f5c6cb; -fx-border-radius: 8;");
         errorLabel.setVisible(false);
         errorLabel.setMaxWidth(Double.MAX_VALUE);
 
         // Login button
         Button loginBtn = new Button("LOGIN");
-        loginBtn.setFont(FontLoader.getPoppinsBold(15));
+        loginBtn.setFont(FontLoader.getPoppinsBold(14));
         loginBtn.setTextFill(Color.WHITE);
         loginBtn.setMaxWidth(Double.MAX_VALUE);
-        loginBtn.setPrefHeight(54);
+        loginBtn.setPrefHeight(48);
         loginBtn.setStyle(
-            "-fx-background-color: #1a3a52; " +
+            "-fx-background-color: " + ColorScheme.BUTTON_PRIMARY_HEX + "; " +
             "-fx-background-radius: 12; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(26, 58, 82, 0.3), 10, 0, 0, 4);"
+            "-fx-effect: dropshadow(gaussian, rgba(31, 90, 150, 0.3), 10, 0, 0, 4);"
         );
         loginBtn.setOnMouseEntered(e -> loginBtn.setStyle(
-            "-fx-background-color: #2d5a7b; " +
+            "-fx-background-color: " + ColorScheme.BUTTON_HOVER_HEX + "; " +
             "-fx-background-radius: 12; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(26, 58, 82, 0.4), 15, 0, 0, 6);"
+            "-fx-effect: dropshadow(gaussian, rgba(31, 90, 150, 0.4), 15, 0, 0, 6);"
         ));
         loginBtn.setOnMouseExited(e -> loginBtn.setStyle(
-            "-fx-background-color: #1a3a52; " +
+            "-fx-background-color: " + ColorScheme.BUTTON_PRIMARY_HEX + "; " +
             "-fx-background-radius: 12; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(26, 58, 82, 0.3), 10, 0, 0, 4);"
+            "-fx-effect: dropshadow(gaussian, rgba(31, 90, 150, 0.3), 10, 0, 0, 4);"
         ));
         
         loginBtn.setOnAction(e -> handleLogin(
@@ -356,7 +356,7 @@ public class LoginScreen {
         
         Hyperlink registerLink = new Hyperlink("Register here");
         registerLink.setFont(FontLoader.getInter(14));
-        registerLink.setTextFill(Color.rgb(26, 58, 82));
+        registerLink.setTextFill(ColorScheme.MEDIUM_BLUE);
         registerLink.setStyle(
             "-fx-border-color: transparent; " +
             "-fx-padding: 0; " +
@@ -366,11 +366,11 @@ public class LoginScreen {
         
         // Hover effects
         registerLink.setOnMouseEntered(e -> {
-            registerLink.setTextFill(Color.rgb(45, 90, 123));
+            registerLink.setTextFill(ColorScheme.LIGHT_BLUE);
             registerLink.setUnderline(true);
         });
         registerLink.setOnMouseExited(e -> {
-            registerLink.setTextFill(Color.rgb(26, 58, 82));
+            registerLink.setTextFill(ColorScheme.MEDIUM_BLUE);
             registerLink.setUnderline(false);
         });
         
@@ -384,7 +384,7 @@ public class LoginScreen {
 
         // Add spacing
         VBox.setMargin(headerBox, new Insets(0, 0, 10, 0));
-        VBox.setMargin(loginBtn, new Insets(5, 0, 0, 0));
+        VBox.setMargin(loginBtn, new Insets(5, 0, 5, 0));
 
         section.getChildren().addAll(
             headerBox,
@@ -407,10 +407,38 @@ public class LoginScreen {
     }
 
     private void handleLogin(String username, String password, Label errorLabel) {
-        if (username.isEmpty() || password.isEmpty()) {
-            showError(errorLabel, "Please fill in all fields.");
+        // Clear previous error
+        errorLabel.setVisible(false);
+        
+        // Validate username
+        if (username.isEmpty()) {
+            showError(errorLabel, "Please enter your username.");
             return;
         }
+        
+        if (username.length() < 3) {
+            showError(errorLabel, "Username must be at least 3 characters long.");
+            return;
+        }
+        
+        // Check for invalid characters in username
+        if (!username.matches("^[a-zA-Z0-9_]+$")) {
+            showError(errorLabel, "Username can only contain letters, numbers, and underscores.");
+            return;
+        }
+        
+        // Validate password
+        if (password.isEmpty()) {
+            showError(errorLabel, "Please enter your password.");
+            return;
+        }
+        
+        if (password.length() < 6) {
+            showError(errorLabel, "Password must be at least 6 characters long.");
+            return;
+        }
+        
+        // Attempt login
         try {
             User user = userDao.login(username, password);
             if (user != null) {
@@ -420,10 +448,11 @@ public class LoginScreen {
                     new StudentPortal(stage, user).show();
                 }
             } else {
-                showError(errorLabel, "Invalid username or password.");
+                showError(errorLabel, "Invalid username or password. Please try again.");
             }
         } catch (SQLException e) {
-            showError(errorLabel, "Database error: " + e.getMessage());
+            showError(errorLabel, "Database error: Unable to connect. Please try again later.");
+            e.printStackTrace();
         }
     }
 

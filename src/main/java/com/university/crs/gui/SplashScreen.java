@@ -29,7 +29,7 @@ public class SplashScreen {
 
     public void show() {
         StackPane root = new StackPane();
-        root.setStyle("-fx-background-color: linear-gradient(to bottom, #1a3a52, #0d2438);");
+        root.setStyle("-fx-background-color: " + ColorScheme.GRADIENT_SIDEBAR + ";");
 
         VBox content = new VBox(35);
         content.setAlignment(Pos.CENTER);
@@ -48,12 +48,12 @@ public class SplashScreen {
         // Title with Poppins font
         Label title = new Label("COURSE REGISTRATION");
         title.setFont(FontLoader.getPoppinsBold(38));
-        title.setTextFill(Color.WHITE);
+        title.setTextFill(ColorScheme.WHITE);
         title.setStyle("-fx-letter-spacing: 2px;");
         
         Label titleLine2 = new Label("SYSTEM");
         titleLine2.setFont(FontLoader.getPoppinsBold(38));
-        titleLine2.setTextFill(Color.WHITE);
+        titleLine2.setTextFill(ColorScheme.WHITE);
         titleLine2.setStyle("-fx-letter-spacing: 2px;");
         
         VBox titleBox = new VBox(5);
@@ -63,7 +63,7 @@ public class SplashScreen {
         // Subtitle with Inter font
         Label subtitle = new Label("Smart way to register your future");
         subtitle.setFont(FontLoader.getInter(17));
-        subtitle.setTextFill(Color.rgb(220, 230, 240));
+        subtitle.setTextFill(ColorScheme.LIGHT_BLUE);
         subtitle.setStyle("-fx-letter-spacing: 0.5px;");
 
         // Loading spinner
@@ -71,7 +71,7 @@ public class SplashScreen {
         Arc spinner = createSpinner();
         Label loadingText = new Label("Loading...");
         loadingText.setFont(FontLoader.getInter(15));
-        loadingText.setTextFill(Color.rgb(220, 230, 240));
+        loadingText.setTextFill(ColorScheme.LIGHT_BLUE);
         loadingText.setStyle("-fx-letter-spacing: 1px;");
         
         VBox loadingBox = new VBox(18);
@@ -132,41 +132,41 @@ public class SplashScreen {
             0.0, 15.0,      // bottom point
             -70.0, 0.0      // left point
         );
-        capBoard.setFill(Color.WHITE);
-        capBoard.setStroke(Color.rgb(200, 210, 220));
+        capBoard.setFill(ColorScheme.WHITE);
+        capBoard.setStroke(ColorScheme.LIGHT_BLUE);
         capBoard.setStrokeWidth(3);
         
         // Cap base (cylinder/button on top)
         Ellipse capBase = new Ellipse(0, 0, 25, 8);
-        capBase.setFill(Color.WHITE);
-        capBase.setStroke(Color.rgb(200, 210, 220));
+        capBase.setFill(ColorScheme.WHITE);
+        capBase.setStroke(ColorScheme.LIGHT_BLUE);
         capBase.setStrokeWidth(2.5);
         
         // Tassel string
         Line tasselString = new Line(35, 0, 50, 25);
-        tasselString.setStroke(Color.WHITE);
+        tasselString.setStroke(ColorScheme.WHITE);
         tasselString.setStrokeWidth(2.5);
         tasselString.setStrokeLineCap(StrokeLineCap.ROUND);
         
         // Tassel top knot
         Circle tasselKnot = new Circle(50, 25, 5);
-        tasselKnot.setFill(Color.WHITE);
-        tasselKnot.setStroke(Color.rgb(200, 210, 220));
+        tasselKnot.setFill(ColorScheme.WHITE);
+        tasselKnot.setStroke(ColorScheme.LIGHT_BLUE);
         tasselKnot.setStrokeWidth(2);
         
         // Tassel threads (multiple lines)
         Line thread1 = new Line(50, 30, 48, 42);
-        thread1.setStroke(Color.WHITE);
+        thread1.setStroke(ColorScheme.WHITE);
         thread1.setStrokeWidth(2);
         thread1.setStrokeLineCap(StrokeLineCap.ROUND);
         
         Line thread2 = new Line(50, 30, 52, 42);
-        thread2.setStroke(Color.WHITE);
+        thread2.setStroke(ColorScheme.WHITE);
         thread2.setStrokeWidth(2);
         thread2.setStrokeLineCap(StrokeLineCap.ROUND);
         
         Line thread3 = new Line(50, 30, 50, 44);
-        thread3.setStroke(Color.WHITE);
+        thread3.setStroke(ColorScheme.WHITE);
         thread3.setStrokeWidth(2);
         thread3.setStrokeLineCap(StrokeLineCap.ROUND);
         
@@ -198,7 +198,7 @@ public class SplashScreen {
         arc.setLength(280);
         arc.setType(ArcType.OPEN);
         arc.setFill(null);
-        arc.setStroke(Color.WHITE);
+        arc.setStroke(ColorScheme.WHITE);
         arc.setStrokeWidth(3.5);
         arc.setStrokeLineCap(StrokeLineCap.ROUND);
         return arc;

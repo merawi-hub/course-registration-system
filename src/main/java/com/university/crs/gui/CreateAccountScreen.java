@@ -55,7 +55,10 @@ public class CreateAccountScreen {
         section.setPrefWidth(450);
         section.setAlignment(Pos.CENTER);
         section.setPadding(new Insets(60, 50, 60, 50));
-        section.setStyle("-fx-background-color: #1a3a52; -fx-background-radius: 20 0 0 20;");
+        section.setStyle(
+            "-fx-background-color: " + ColorScheme.GRADIENT_BLUE + "; " +
+            "-fx-background-radius: 20 0 0 20;"
+        );
 
         // Graduation cap icon (same as login)
         StackPane icon = createGraduationCapIcon();
@@ -112,7 +115,7 @@ public class CreateAccountScreen {
         StackPane iconContainer = new StackPane();
         
         // Try to load image first
-        javafx.scene.image.ImageView imageView = ImageLoader.loadImage("graduation-hat.png", 100, 100);
+        javafx.scene.image.ImageView imageView = ImageLoader.loadImage("graduation-cap.png", 100, 100);
         
         if (imageView != null) {
             iconContainer.getChildren().add(imageView);
@@ -205,8 +208,8 @@ public class CreateAccountScreen {
         departmentCombo.setMaxWidth(Double.MAX_VALUE);
         departmentCombo.setPrefHeight(45);
         departmentCombo.setStyle(
-            "-fx-background-color: #f8f9fa; " +
-            "-fx-border-color: #e0e0e0; " +
+            "-fx-background-color: " + ColorScheme.BACKGROUND_HEX + "; " +
+            "-fx-border-color: " + ColorScheme.SOFT_GRAY_HEX + "; " +
             "-fx-border-radius: 10; " +
             "-fx-background-radius: 10; " +
             "-fx-font-size: 15px; " +
@@ -229,22 +232,22 @@ public class CreateAccountScreen {
         registerBtn.setMaxWidth(Double.MAX_VALUE);
         registerBtn.setPrefHeight(48);
         registerBtn.setStyle(
-            "-fx-background-color: #1a3a52; " +
+            "-fx-background-color: " + ColorScheme.BUTTON_PRIMARY_HEX + "; " +
             "-fx-background-radius: 12; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(26, 58, 82, 0.3), 10, 0, 0, 4);"
+            "-fx-effect: dropshadow(gaussian, rgba(31, 90, 150, 0.3), 10, 0, 0, 4);"
         );
         registerBtn.setOnMouseEntered(e -> registerBtn.setStyle(
-            "-fx-background-color: #2d5a7b; " +
+            "-fx-background-color: " + ColorScheme.BUTTON_HOVER_HEX + "; " +
             "-fx-background-radius: 12; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(26, 58, 82, 0.4), 15, 0, 0, 6);"
+            "-fx-effect: dropshadow(gaussian, rgba(31, 90, 150, 0.4), 15, 0, 0, 6);"
         ));
         registerBtn.setOnMouseExited(e -> registerBtn.setStyle(
-            "-fx-background-color: #1a3a52; " +
+            "-fx-background-color: " + ColorScheme.BUTTON_PRIMARY_HEX + "; " +
             "-fx-background-radius: 12; " +
             "-fx-cursor: hand; " +
-            "-fx-effect: dropshadow(gaussian, rgba(26, 58, 82, 0.3), 10, 0, 0, 4);"
+            "-fx-effect: dropshadow(gaussian, rgba(31, 90, 150, 0.3), 10, 0, 0, 4);"
         ));
         
         registerBtn.setOnAction(e -> handleCreate(
@@ -265,9 +268,9 @@ public class CreateAccountScreen {
         
         Hyperlink loginLink = new Hyperlink("Login here");
         loginLink.setFont(FontLoader.getInter(13));
-        loginLink.setStyle("-fx-text-fill: #1a3a52; -fx-border-color: transparent; -fx-font-weight: 600;");
-        loginLink.setOnMouseEntered(e -> loginLink.setStyle("-fx-text-fill: #2d5a7b; -fx-border-color: transparent; -fx-font-weight: 600; -fx-underline: true;"));
-        loginLink.setOnMouseExited(e -> loginLink.setStyle("-fx-text-fill: #1a3a52; -fx-border-color: transparent; -fx-font-weight: 600;"));
+        loginLink.setStyle("-fx-text-fill: " + ColorScheme.MEDIUM_BLUE_HEX + "; -fx-border-color: transparent; -fx-font-weight: 600;");
+        loginLink.setOnMouseEntered(e -> loginLink.setStyle("-fx-text-fill: " + ColorScheme.LIGHT_BLUE_HEX + "; -fx-border-color: transparent; -fx-font-weight: 600; -fx-underline: true;"));
+        loginLink.setOnMouseExited(e -> loginLink.setStyle("-fx-text-fill: " + ColorScheme.MEDIUM_BLUE_HEX + "; -fx-border-color: transparent; -fx-font-weight: 600;"));
         loginLink.setOnAction(e -> new LoginScreen(stage).show());
         
         loginRow.getChildren().addAll(hasAccount, loginLink);
@@ -345,8 +348,8 @@ public class CreateAccountScreen {
 
     private void styleInputField(TextField field) {
         field.setStyle(
-            "-fx-background-color: #f8f9fa; " +
-            "-fx-border-color: #e0e0e0; " +
+            "-fx-background-color: " + ColorScheme.BACKGROUND_HEX + "; " +
+            "-fx-border-color: " + ColorScheme.SOFT_GRAY_HEX + "; " +
             "-fx-border-radius: 10; " +
             "-fx-background-radius: 10; " +
             "-fx-padding: 12 16; " +
@@ -361,7 +364,7 @@ public class CreateAccountScreen {
             if (newVal) {
                 field.setStyle(
                     "-fx-background-color: white; " +
-                    "-fx-border-color: #1a3a52; " +
+                    "-fx-border-color: " + ColorScheme.MEDIUM_BLUE_HEX + "; " +
                     "-fx-border-width: 2; " +
                     "-fx-border-radius: 10; " +
                     "-fx-background-radius: 10; " +
@@ -370,15 +373,31 @@ public class CreateAccountScreen {
                     "-fx-font-family: " + FontLoader.getInterFontFamily() + ";"
                 );
             } else {
-                field.setStyle(
-                    "-fx-background-color: #f8f9fa; " +
-                    "-fx-border-color: #e0e0e0; " +
-                    "-fx-border-radius: 10; " +
-                    "-fx-background-radius: 10; " +
-                    "-fx-padding: 12 16; " +
-                    "-fx-font-size: 15px; " +
-                    "-fx-font-family: " + FontLoader.getInterFontFamily() + ";"
-                );
+                // Validate on blur
+                String text = field.getText().trim();
+                boolean isValid = !text.isEmpty();
+                
+                if (isValid) {
+                    field.setStyle(
+                        "-fx-background-color: " + ColorScheme.BACKGROUND_HEX + "; " +
+                        "-fx-border-color: " + ColorScheme.SOFT_GRAY_HEX + "; " +
+                        "-fx-border-radius: 10; " +
+                        "-fx-background-radius: 10; " +
+                        "-fx-padding: 12 16; " +
+                        "-fx-font-size: 15px; " +
+                        "-fx-font-family: " + FontLoader.getInterFontFamily() + ";"
+                    );
+                } else {
+                    field.setStyle(
+                        "-fx-background-color: #fff5f5; " +
+                        "-fx-border-color: " + ColorScheme.DANGER_HEX + "; " +
+                        "-fx-border-radius: 10; " +
+                        "-fx-background-radius: 10; " +
+                        "-fx-padding: 12 16; " +
+                        "-fx-font-size: 15px; " +
+                        "-fx-font-family: " + FontLoader.getInterFontFamily() + ";"
+                    );
+                }
             }
         });
     }
@@ -386,34 +405,97 @@ public class CreateAccountScreen {
     private void handleCreate(String fullName, String username, String email,
                                String password, String confirm, String department,
                                Label messageLabel) {
-        // Validation
-        if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || 
-            password.isEmpty() || confirm.isEmpty() || department == null) {
-            showMsg(messageLabel, "Please fill in all fields.", false);
+        // Clear previous message
+        messageLabel.setVisible(false);
+        
+        // Validate full name
+        if (fullName.isEmpty()) {
+            showMsg(messageLabel, "Please enter your full name.", false);
             return;
         }
-        if (username.length() < 3) {
-            showMsg(messageLabel, "Username must be at least 3 characters.", false);
+        if (fullName.length() < 3) {
+            showMsg(messageLabel, "Full name must be at least 3 characters long.", false);
             return;
         }
-        if (!email.contains("@")) {
-            showMsg(messageLabel, "Please enter a valid email address.", false);
-            return;
-        }
-        if (password.length() < 6) {
-            showMsg(messageLabel, "Password must be at least 6 characters.", false);
-            return;
-        }
-        if (!password.equals(confirm)) {
-            showMsg(messageLabel, "Passwords do not match.", false);
+        if (!fullName.matches("^[a-zA-Z\\s]+$")) {
+            showMsg(messageLabel, "Full name can only contain letters and spaces.", false);
             return;
         }
         
+        // Validate username
+        if (username.isEmpty()) {
+            showMsg(messageLabel, "Please enter a username.", false);
+            return;
+        }
+        if (username.length() < 3) {
+            showMsg(messageLabel, "Username must be at least 3 characters long.", false);
+            return;
+        }
+        if (username.length() > 20) {
+            showMsg(messageLabel, "Username must not exceed 20 characters.", false);
+            return;
+        }
+        if (!username.matches("^[a-zA-Z0-9_]+$")) {
+            showMsg(messageLabel, "Username can only contain letters, numbers, and underscores.", false);
+            return;
+        }
+        
+        // Validate email
+        if (email.isEmpty()) {
+            showMsg(messageLabel, "Please enter your email address.", false);
+            return;
+        }
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            showMsg(messageLabel, "Please enter a valid email address (e.g., user@example.com).", false);
+            return;
+        }
+        
+        // Validate password
+        if (password.isEmpty()) {
+            showMsg(messageLabel, "Please enter a password.", false);
+            return;
+        }
+        if (password.length() < 6) {
+            showMsg(messageLabel, "Password must be at least 6 characters long.", false);
+            return;
+        }
+        if (password.length() > 50) {
+            showMsg(messageLabel, "Password must not exceed 50 characters.", false);
+            return;
+        }
+        // Check password strength
+        boolean hasUpper = password.matches(".*[A-Z].*");
+        boolean hasLower = password.matches(".*[a-z].*");
+        boolean hasDigit = password.matches(".*\\d.*");
+        
+        if (!hasUpper || !hasLower || !hasDigit) {
+            showMsg(messageLabel, "Password must contain at least one uppercase letter, one lowercase letter, and one number.", false);
+            return;
+        }
+        
+        // Validate confirm password
+        if (confirm.isEmpty()) {
+            showMsg(messageLabel, "Please confirm your password.", false);
+            return;
+        }
+        if (!password.equals(confirm)) {
+            showMsg(messageLabel, "Passwords do not match. Please try again.", false);
+            return;
+        }
+        
+        // Validate department
+        if (department == null || department.isEmpty()) {
+            showMsg(messageLabel, "Please select a department.", false);
+            return;
+        }
+        
+        // Attempt to create account
         try {
             if (userDao.usernameExists(username)) {
-                showMsg(messageLabel, "Username already taken.", false);
+                showMsg(messageLabel, "Username already taken. Please choose a different username.", false);
                 return;
             }
+            
             // Create student account (role is always STUDENT for this form)
             userDao.createAccount(username, password, "STUDENT");
             showMsg(messageLabel, "Account created successfully! Redirecting to login...", true);
@@ -423,7 +505,8 @@ public class CreateAccountScreen {
                 javafx.application.Platform.runLater(() -> new LoginScreen(stage).show());
             }).start();
         } catch (SQLException e) {
-            showMsg(messageLabel, "Error: " + e.getMessage(), false);
+            showMsg(messageLabel, "Error creating account. Please try again later.", false);
+            e.printStackTrace();
         }
     }
 
@@ -431,7 +514,7 @@ public class CreateAccountScreen {
         label.setText(msg);
         if (success) {
             label.setStyle(
-                "-fx-text-fill: #28a745; " +
+                "-fx-text-fill: " + ColorScheme.SUCCESS_HEX + "; " +
                 "-fx-background-color: #d4edda; " +
                 "-fx-padding: 10 15; " +
                 "-fx-background-radius: 8; " +
@@ -441,7 +524,7 @@ public class CreateAccountScreen {
             );
         } else {
             label.setStyle(
-                "-fx-text-fill: #dc3545; " +
+                "-fx-text-fill: " + ColorScheme.DANGER_HEX + "; " +
                 "-fx-background-color: #f8d7da; " +
                 "-fx-padding: 10 15; " +
                 "-fx-background-radius: 8; " +
