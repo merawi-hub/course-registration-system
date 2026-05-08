@@ -1,7 +1,8 @@
 package com.university.crs.ui;
 
-import com.university.crs.dao.AdminDao;
+import com.university.crs.dao.UserDao;
 import com.university.crs.model.Admin;
+import com.university.crs.model.User;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -11,7 +12,7 @@ import java.util.Scanner;
  */
 public class AdminDashboard {
 
-    private final AdminDao adminDao = new AdminDao();
+    private final UserDao userDao = new UserDao();
     private final Scanner scanner   = new Scanner(System.in);
 
     public void start() {
@@ -35,8 +36,10 @@ public class AdminDashboard {
             String password = scanner.nextLine().trim();
 
             try {
-                Admin admin = adminDao.login(username, password);
-                if (admin != null) {
+                User user = userDao.login(username, password);
+                if (user != null && user.isAdmin()) {
+                    // Create an Admin object from the User
+                    Admin admin = new Admin(user.getId(), user.getUsername(), password);
                     System.out.println("\n  [✓] Welcome, " + admin.getUsername() + "!");
                     return admin;
                 } else {

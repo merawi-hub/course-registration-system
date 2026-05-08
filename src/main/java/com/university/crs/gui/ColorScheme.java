@@ -4,105 +4,149 @@ import javafx.scene.paint.Color;
 
 /**
  * Centralized color scheme for the entire application.
- * Material-style professional palette.
+ * Based on the modern dark blue design with colorful accents.
  */
 public class ColorScheme {
     
     // ═══════════════════════════════════════════════════════════════════
-    // PRIMARY COLORS (Main Theme)
+    // PRIMARY COLORS (Main Theme) - Darker Blue Theme
     // ═══════════════════════════════════════════════════════════════════
     
-    /** Dark Navy Blue - #0D2B4F - Used for headers, dark backgrounds */
-    public static final Color DARK_NAVY = Color.rgb(13, 43, 79);
-    public static final String DARK_NAVY_HEX = "#0D2B4F";
+    /** Very Dark Navy - #0A1929 - Main dark background, headers */
+    public static final Color VERY_DARK_NAVY = Color.rgb(10, 25, 41);
+    public static final String VERY_DARK_NAVY_HEX = "#0A1929";
     
-    /** Deep Blue - #123A63 - Used for sidebar, secondary headers */
-    public static final Color DEEP_BLUE = Color.rgb(18, 58, 99);
-    public static final String DEEP_BLUE_HEX = "#123A63";
+    /** Dark Navy Blue - #0D2847 - Sidebar, cards on dark background */
+    public static final Color DARK_NAVY = Color.rgb(13, 40, 71);
+    public static final String DARK_NAVY_HEX = "#0D2847";
     
-    /** Medium Blue - #1F5A96 - Primary button color, main actions */
-    public static final Color MEDIUM_BLUE = Color.rgb(31, 90, 150);
-    public static final String MEDIUM_BLUE_HEX = "#1F5A96";
+    /** Deep Blue - #1A3A5C - Secondary dark elements */
+    public static final Color DEEP_BLUE = Color.rgb(26, 58, 92);
+    public static final String DEEP_BLUE_HEX = "#1A3A5C";
     
-    /** Light Blue - #4A90E2 - Hover states, links, accents */
-    public static final Color LIGHT_BLUE = Color.rgb(74, 144, 226);
-    public static final String LIGHT_BLUE_HEX = "#4A90E2";
+    /** Medium Blue - #2563EB - Primary button color, main actions */
+    public static final Color MEDIUM_BLUE = Color.rgb(37, 99, 235);
+    public static final String MEDIUM_BLUE_HEX = "#2563EB";
+    
+    /** Light Blue - #3B82F6 - Hover states, links, accents */
+    public static final Color LIGHT_BLUE = Color.rgb(59, 130, 246);
+    public static final String LIGHT_BLUE_HEX = "#3B82F6";
     
     // ═══════════════════════════════════════════════════════════════════
     // BACKGROUND & NEUTRAL COLORS
     // ═══════════════════════════════════════════════════════════════════
     
-    /** Light Gray Background - #F4F6F9 - Main page background */
-    public static final Color BACKGROUND = Color.rgb(244, 246, 249);
-    public static final String BACKGROUND_HEX = "#F4F6F9";
+    /** Light Gray Background - #F8FAFC - Main page background */
+    public static final Color BACKGROUND = Color.rgb(248, 250, 252);
+    public static final String BACKGROUND_HEX = "#F8FAFC";
     
     /** White - #FFFFFF - Cards, containers */
     public static final Color WHITE = Color.rgb(255, 255, 255);
     public static final String WHITE_HEX = "#FFFFFF";
     
-    /** Soft Gray - #E0E0E0 - Borders, dividers */
-    public static final Color SOFT_GRAY = Color.rgb(224, 224, 224);
-    public static final String SOFT_GRAY_HEX = "#E0E0E0";
+    /** Soft Gray - #E2E8F0 - Borders, dividers */
+    public static final Color SOFT_GRAY = Color.rgb(226, 232, 240);
+    public static final String SOFT_GRAY_HEX = "#E2E8F0";
     
-    /** Dark Text - #1F2937 - Primary text color */
-    public static final Color DARK_TEXT = Color.rgb(31, 41, 55);
-    public static final String DARK_TEXT_HEX = "#1F2937";
+    /** Medium Gray - #64748B - Secondary text */
+    public static final Color MEDIUM_GRAY = Color.rgb(100, 116, 139);
+    public static final String MEDIUM_GRAY_HEX = "#64748B";
+    
+    /** Dark Text - #1E293B - Primary text color */
+    public static final Color DARK_TEXT = Color.rgb(30, 41, 59);
+    public static final String DARK_TEXT_HEX = "#1E293B";
     
     // ═══════════════════════════════════════════════════════════════════
-    // ACCENT COLORS (UI Actions & States)
+    // ACCENT COLORS (Colorful Palette from Design)
     // ═══════════════════════════════════════════════════════════════════
     
-    /** Green - #28C76F - Success, active states */
-    public static final Color SUCCESS = Color.rgb(40, 199, 111);
-    public static final String SUCCESS_HEX = "#28C76F";
+    /** Palette Color 1 - Dark Blue */
+    public static final Color PALETTE_DARK_BLUE = Color.rgb(30, 58, 138);
+    public static final String PALETTE_DARK_BLUE_HEX = "#1E3A8A";
     
-    /** Red - #EA5455 - Delete, danger, errors */
-    public static final Color DANGER = Color.rgb(234, 84, 85);
-    public static final String DANGER_HEX = "#EA5455";
+    /** Palette Color 2 - Blue */
+    public static final Color PALETTE_BLUE = Color.rgb(37, 99, 235);
+    public static final String PALETTE_BLUE_HEX = "#2563EB";
     
-    /** Orange - #FF9F43 - Warnings, highlights */
-    public static final Color WARNING = Color.rgb(255, 159, 67);
-    public static final String WARNING_HEX = "#FF9F43";
+    /** Palette Color 3 - Teal */
+    public static final Color PALETTE_TEAL = Color.rgb(20, 184, 166);
+    public static final String PALETTE_TEAL_HEX = "#14B8A6";
     
-    /** Purple - #7367F0 - Cards, stats */
-    public static final Color PURPLE = Color.rgb(115, 103, 240);
-    public static final String PURPLE_HEX = "#7367F0";
+    /** Palette Color 4 - Green */
+    public static final Color PALETTE_GREEN = Color.rgb(34, 197, 94);
+    public static final String PALETTE_GREEN_HEX = "#22C55E";
     
-    /** Teal/Cyan - #00CFE8 - Info, secondary accents */
-    public static final Color TEAL = Color.rgb(0, 207, 232);
-    public static final String TEAL_HEX = "#00CFE8";
+    /** Palette Color 5 - Yellow */
+    public static final Color PALETTE_YELLOW = Color.rgb(234, 179, 8);
+    public static final String PALETTE_YELLOW_HEX = "#EAB308";
+    
+    /** Palette Color 6 - Orange */
+    public static final Color PALETTE_ORANGE = Color.rgb(249, 115, 22);
+    public static final String PALETTE_ORANGE_HEX = "#F97316";
+    
+    /** Palette Color 7 - Red */
+    public static final Color PALETTE_RED = Color.rgb(239, 68, 68);
+    public static final String PALETTE_RED_HEX = "#EF4444";
+    
+    /** Palette Color 8 - Gray Blue */
+    public static final Color PALETTE_GRAY_BLUE = Color.rgb(100, 116, 139);
+    public static final String PALETTE_GRAY_BLUE_HEX = "#64748B";
+    
+    // ═══════════════════════════════════════════════════════════════════
+    // SEMANTIC COLORS (UI Actions & States)
+    // ═══════════════════════════════════════════════════════════════════
+    
+    /** Green - Success, active states */
+    public static final Color SUCCESS = PALETTE_GREEN;
+    public static final String SUCCESS_HEX = PALETTE_GREEN_HEX;
+    
+    /** Red - Delete, danger, errors */
+    public static final Color DANGER = PALETTE_RED;
+    public static final String DANGER_HEX = PALETTE_RED_HEX;
+    
+    /** Orange - Warnings, highlights */
+    public static final Color WARNING = PALETTE_ORANGE;
+    public static final String WARNING_HEX = PALETTE_ORANGE_HEX;
+    
+    /** Purple - #8B5CF6 - Cards, stats */
+    public static final Color PURPLE = Color.rgb(139, 92, 246);
+    public static final String PURPLE_HEX = "#8B5CF6";
+    
+    /** Teal/Cyan - Info, secondary accents */
+    public static final Color TEAL = PALETTE_TEAL;
+    public static final String TEAL_HEX = PALETTE_TEAL_HEX;
     
     // ═══════════════════════════════════════════════════════════════════
     // BUTTON COLORS
     // ═══════════════════════════════════════════════════════════════════
     
-    /** Primary Button - #1F5A96 - Main action buttons */
+    /** Primary Button - Main action buttons */
     public static final Color BUTTON_PRIMARY = MEDIUM_BLUE;
     public static final String BUTTON_PRIMARY_HEX = MEDIUM_BLUE_HEX;
     
-    /** Hover Blue - #174A7C - Button hover state */
-    public static final Color BUTTON_HOVER = Color.rgb(23, 74, 124);
-    public static final String BUTTON_HOVER_HEX = "#174A7C";
+    /** Hover Blue - Button hover state */
+    public static final Color BUTTON_HOVER = Color.rgb(29, 78, 216);
+    public static final String BUTTON_HOVER_HEX = "#1D4ED8";
     
-    /** Delete Button - #EA5455 - Destructive actions */
+    /** Delete Button - Destructive actions */
     public static final Color BUTTON_DELETE = DANGER;
     public static final String BUTTON_DELETE_HEX = DANGER_HEX;
     
     /** Delete Button Hover - Darker red */
-    public static final Color BUTTON_DELETE_HOVER = Color.rgb(220, 60, 61);
-    public static final String BUTTON_DELETE_HOVER_HEX = "#DC3C3D";
+    public static final Color BUTTON_DELETE_HOVER = Color.rgb(220, 38, 38);
+    public static final String BUTTON_DELETE_HOVER_HEX = "#DC2626";
     
     // ═══════════════════════════════════════════════════════════════════
     // GRADIENTS (CSS Strings)
     // ═══════════════════════════════════════════════════════════════════
     
-    /** Blue gradient for branding sections */
-    public static final String GRADIENT_BLUE = 
-        "linear-gradient(to bottom right, " + DARK_NAVY_HEX + ", " + DEEP_BLUE_HEX + ")";
+    /** Dark blue gradient for branding sections */
+    public static final String GRADIENT_DARK_BLUE = 
+        "linear-gradient(to bottom right, " + VERY_DARK_NAVY_HEX + ", " + DARK_NAVY_HEX + ")";
     
     /** Sidebar gradient */
     public static final String GRADIENT_SIDEBAR = 
-        "linear-gradient(to bottom, " + DEEP_BLUE_HEX + ", " + DARK_NAVY_HEX + ")";
+        "linear-gradient(to bottom, " + DARK_NAVY_HEX + ", " + VERY_DARK_NAVY_HEX + ")";
     
     /** Button gradient (optional) */
     public static final String GRADIENT_BUTTON = 
@@ -137,7 +181,7 @@ public class ColorScheme {
      * Get shadow CSS for cards
      */
     public static String getCardShadow() {
-        return "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 3);";
+        return "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 20, 0, 0, 4);";
     }
     
     /**
@@ -147,6 +191,9 @@ public class ColorScheme {
         return "-fx-background-color: " + BUTTON_PRIMARY_HEX + "; " +
                "-fx-text-fill: white; " +
                "-fx-background-radius: 8; " +
+               "-fx-padding: 10 20; " +
+               "-fx-font-size: 14px; " +
+               "-fx-font-weight: 600; " +
                "-fx-cursor: hand;";
     }
     
@@ -157,6 +204,9 @@ public class ColorScheme {
         return "-fx-background-color: " + BUTTON_HOVER_HEX + "; " +
                "-fx-text-fill: white; " +
                "-fx-background-radius: 8; " +
+               "-fx-padding: 10 20; " +
+               "-fx-font-size: 14px; " +
+               "-fx-font-weight: 600; " +
                "-fx-cursor: hand;";
     }
     
@@ -167,6 +217,8 @@ public class ColorScheme {
         return "-fx-background-color: " + BUTTON_DELETE_HEX + "; " +
                "-fx-text-fill: white; " +
                "-fx-background-radius: 8; " +
+               "-fx-padding: 8 16; " +
+               "-fx-font-size: 13px; " +
                "-fx-cursor: hand;";
     }
     
@@ -177,6 +229,24 @@ public class ColorScheme {
         return "-fx-background-color: " + BUTTON_DELETE_HOVER_HEX + "; " +
                "-fx-text-fill: white; " +
                "-fx-background-radius: 8; " +
+               "-fx-padding: 8 16; " +
+               "-fx-font-size: 13px; " +
                "-fx-cursor: hand;";
+    }
+    
+    /**
+     * Get all palette colors as an array
+     */
+    public static String[] getPaletteColors() {
+        return new String[]{
+            PALETTE_DARK_BLUE_HEX,
+            PALETTE_BLUE_HEX,
+            PALETTE_TEAL_HEX,
+            PALETTE_GREEN_HEX,
+            PALETTE_YELLOW_HEX,
+            PALETTE_ORANGE_HEX,
+            PALETTE_RED_HEX,
+            PALETTE_GRAY_BLUE_HEX
+        };
     }
 }

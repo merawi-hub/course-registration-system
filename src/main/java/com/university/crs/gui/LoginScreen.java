@@ -63,7 +63,7 @@ public class LoginScreen {
         section.setAlignment(Pos.CENTER);
         section.setPadding(new Insets(60, 50, 60, 50));
         section.setStyle(
-            "-fx-background-color: " + ColorScheme.GRADIENT_BLUE + "; " +
+            "-fx-background-color: " + ColorScheme.GRADIENT_DARK_BLUE + "; " +
             "-fx-background-radius: 25 0 0 25;"
         );
 

@@ -22,6 +22,7 @@ public class CoursesPage {
     private final Stage stage;
     private final User  user;
     private final CourseDao courseDao = new CourseDao();
+    private VBox mainContainer; // Store reference to main container
 
     public CoursesPage(Stage stage, User user) {
         this.stage = stage;
@@ -29,9 +30,9 @@ public class CoursesPage {
     }
 
     public Node build() {
-        VBox page = new VBox(30);
-        page.setPadding(new Insets(40, 50, 40, 50));
-        page.setStyle("-fx-background-color: " + ColorScheme.BACKGROUND_HEX + ";");
+        mainContainer = new VBox(30);
+        mainContainer.setPadding(new Insets(40, 50, 40, 50));
+        mainContainer.setStyle("-fx-background-color: " + ColorScheme.BACKGROUND_HEX + ";");
 
         // Header with title and Add Course button
         HBox header = new HBox();
@@ -59,9 +60,9 @@ public class CoursesPage {
         // Table container
         VBox tableContainer = buildTableContainer();
 
-        page.getChildren().addAll(header, tableContainer);
+        mainContainer.getChildren().addAll(header, tableContainer);
         
-        ScrollPane scrollPane = new ScrollPane(page);
+        ScrollPane scrollPane = new ScrollPane(mainContainer);
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background: " + ColorScheme.BACKGROUND_HEX + "; -fx-background-color: " + ColorScheme.BACKGROUND_HEX + ";");
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -333,8 +334,36 @@ public class CoursesPage {
     }
 
     private void refreshPage() {
-        // Rebuild the entire page
-        stage.getScene().setRoot(new StackPane(build()));
+        // Rebuild just the content, not the entire scene
+        mainContainer.getChildren().clear();
+        
+        // Rebuild header
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER_LEFT);
+        
+        Label heading = new Label("Manage Courses");
+        heading.setFont(FontLoader.getPoppinsBold(28));
+        heading.setTextFill(ColorScheme.DARK_TEXT);
+        
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        
+        Button addCourseBtn = new Button("+ Add Course");
+        addCourseBtn.setFont(FontLoader.getPoppinsBold(14));
+        addCourseBtn.setTextFill(ColorScheme.WHITE);
+        addCourseBtn.setPrefHeight(45);
+        addCourseBtn.setPrefWidth(150);
+        addCourseBtn.setStyle(ColorScheme.getPrimaryButtonStyle());
+        addCourseBtn.setOnMouseEntered(e -> addCourseBtn.setStyle(ColorScheme.getPrimaryButtonHoverStyle()));
+        addCourseBtn.setOnMouseExited(e -> addCourseBtn.setStyle(ColorScheme.getPrimaryButtonStyle()));
+        addCourseBtn.setOnAction(e -> showAddCourseDialog());
+        
+        header.getChildren().addAll(heading, spacer, addCourseBtn);
+        
+        // Rebuild table
+        VBox tableContainer = buildTableContainer();
+        
+        mainContainer.getChildren().addAll(header, tableContainer);
     }
 
     private void showAlert(String title, String message) {
