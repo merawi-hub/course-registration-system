@@ -81,6 +81,33 @@ public class ValidationUtil {
     }
     
     /**
+     * Validate instructor name.
+     */
+    public static ValidationResult validateInstructor(String instructor) {
+        // Instructor is optional
+        if (instructor == null || instructor.trim().isEmpty()) {
+            return ValidationResult.success(null);
+        }
+        
+        String trimmed = instructor.trim();
+        
+        if (trimmed.length() < 2) {
+            return ValidationResult.error("Instructor name must be at least 2 characters");
+        }
+        
+        if (trimmed.length() > 100) {
+            return ValidationResult.error("Instructor name must not exceed 100 characters");
+        }
+        
+        // Allow letters, spaces, periods, hyphens, apostrophes (for names like "Dr. O'Brien")
+        if (!Pattern.matches("^[A-Za-z\\s.'-]+$", trimmed)) {
+            return ValidationResult.error("Instructor name can only contain letters, spaces, periods, hyphens, and apostrophes");
+        }
+        
+        return ValidationResult.success(trimmed);
+    }
+    
+    /**
      * Validate course credits.
      */
     public static ValidationResult validateCredits(String creditsStr) {

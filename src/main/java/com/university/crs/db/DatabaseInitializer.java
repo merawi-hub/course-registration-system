@@ -30,6 +30,7 @@ public class DatabaseInitializer {
                     id         INT AUTO_INCREMENT PRIMARY KEY,
                     code       VARCHAR(20)  NOT NULL UNIQUE,
                     title      VARCHAR(150) NOT NULL,
+                    instructor VARCHAR(100) NULL,
                     credits    INT          NOT NULL,
                     capacity   INT          NOT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -67,6 +68,20 @@ public class DatabaseInitializer {
                     UNIQUE KEY uq_enrollment (student_id, course_id)
                 )
             """);
+            
+            // Migration: Add instructor column if it doesn't exist (for existing databases)
+            try {
+                stmt.executeUpdate("""
+                    ALTER TABLE courses 
+                    ADD COLUMN instructor VARCHAR(100) NULL AFTER title
+                """);
+                System.out.println("Added instructor column to courses table.");
+            } catch (SQLException e) {
+                // Column already exists, ignore
+                if (!e.getMessage().contains("Duplicate column")) {
+                    System.out.println("Instructor column already exists or migration not needed.");
+                }
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Failed to initialize database schema: " + e.getMessage(), e);

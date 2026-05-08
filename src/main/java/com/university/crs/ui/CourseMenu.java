@@ -68,6 +68,9 @@ public class CourseMenu {
             String code = scanner.nextLine().trim().toUpperCase();
             System.out.print("  Title    : ");
             String title = scanner.nextLine().trim();
+            System.out.print("  Instructor (optional): ");
+            String instructor = scanner.nextLine().trim();
+            if (instructor.isEmpty()) instructor = null;
             System.out.print("  Credits  : ");
             int credits = Integer.parseInt(scanner.nextLine().trim());
             System.out.print("  Capacity : ");
@@ -77,7 +80,7 @@ public class CourseMenu {
                 System.out.println("  [!] Code and title cannot be empty.");
                 return;
             }
-            courseDao.addCourse(code, title, credits, capacity);
+            courseDao.addCourse(code, title, instructor, credits, capacity);
             System.out.println("  [✓] Course added successfully.");
         } catch (NumberFormatException e) {
             System.out.println("  [!] Credits and capacity must be numbers.");
@@ -105,6 +108,8 @@ public class CourseMenu {
             String code = scanner.nextLine().trim().toUpperCase();
             System.out.print("  New Title    (leave blank to keep): ");
             String title = scanner.nextLine().trim();
+            System.out.print("  New Instructor (leave blank to keep): ");
+            String instructor = scanner.nextLine().trim();
             System.out.print("  New Credits  (leave blank to keep): ");
             String creditsStr = scanner.nextLine().trim();
             System.out.print("  New Capacity (leave blank to keep): ");
@@ -112,10 +117,11 @@ public class CourseMenu {
 
             code     = code.isEmpty()     ? existing.getCode()     : code;
             title    = title.isEmpty()    ? existing.getTitle()    : title;
+            instructor = instructor.isEmpty() ? existing.getInstructor() : instructor;
             int credits  = creditsStr.isEmpty()  ? existing.getCredits()  : Integer.parseInt(creditsStr);
             int capacity = capacityStr.isEmpty() ? existing.getCapacity() : Integer.parseInt(capacityStr);
 
-            if (courseDao.updateCourse(id, code, title, credits, capacity)) {
+            if (courseDao.updateCourse(id, code, title, instructor, credits, capacity)) {
                 System.out.println("  [✓] Course updated successfully.");
             } else {
                 System.out.println("  [!] Update failed.");

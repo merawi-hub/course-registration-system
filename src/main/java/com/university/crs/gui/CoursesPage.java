@@ -88,13 +88,14 @@ public class CoursesPage {
         headerRow.setPadding(new Insets(0, 0, 15, 0));
         headerRow.setStyle("-fx-border-color: " + ColorScheme.SOFT_GRAY_HEX + "; -fx-border-width: 0 0 1 0;");
         
-        Label col1 = createHeaderLabel("Course Code", 150);
-        Label col2 = createHeaderLabel("Course Name", 350);
-        Label col3 = createHeaderLabel("Instructor", 200);
-        Label col4 = createHeaderLabel("Seats", 100);
-        Label col5 = createHeaderLabel("Actions", 120);
+        Label col1 = createHeaderLabel("Course Code", 120);
+        Label col2 = createHeaderLabel("Course Name", 280);
+        Label col3 = createHeaderLabel("Instructor", 180);
+        Label col4 = createHeaderLabel("Credits", 80);
+        Label col5 = createHeaderLabel("Seats", 80);
+        Label col6 = createHeaderLabel("Actions", 120);
         
-        headerRow.getChildren().addAll(col1, col2, col3, col4, col5);
+        headerRow.getChildren().addAll(col1, col2, col3, col4, col5, col6);
 
         // Table rows
         VBox rows = new VBox(0);
@@ -131,10 +132,11 @@ public class CoursesPage {
         row.setPadding(new Insets(15, 0, 15, 0));
         row.setStyle("-fx-border-color: #f3f4f6; -fx-border-width: 0 0 1 0;");
         
-        Label col1 = createCellLabel(course.getCode(), 150);
-        Label col2 = createCellLabel(course.getTitle(), 350);
-        Label col3 = createCellLabel("Dr. Smith", 200); // Placeholder instructor
-        Label col4 = createCellLabel(String.valueOf(course.getCapacity()), 100);
+        Label col1 = createCellLabel(course.getCode(), 120);
+        Label col2 = createCellLabel(course.getTitle(), 280);
+        Label col3 = createCellLabel(course.getInstructor() != null ? course.getInstructor() : "TBA", 180);
+        Label col4 = createCellLabel(String.valueOf(course.getCredits()), 80);
+        Label col5 = createCellLabel(String.valueOf(course.getCapacity()), 80);
         
         // Actions (Edit and Delete icons)
         HBox actions = new HBox(15);
@@ -185,7 +187,7 @@ public class CoursesPage {
         
         actions.getChildren().addAll(editBtn, deleteBtn);
         
-        row.getChildren().addAll(col1, col2, col3, col4, actions);
+        row.getChildren().addAll(col1, col2, col3, col4, col5, actions);
         
         // Hover effect
         row.setOnMouseEntered(e -> row.setStyle(
@@ -224,7 +226,9 @@ public class CoursesPage {
         TextField codeField = new TextField();
         codeField.setPromptText("e.g., CS101");
         TextField titleField = new TextField();
-        titleField.setPromptText("e.g., Introduction to CS");
+        titleField.setPromptText("e.g., Introduction to Computer Science");
+        TextField instructorField = new TextField();
+        instructorField.setPromptText("e.g., Dr. John Smith (optional)");
         TextField creditsField = new TextField();
         creditsField.setPromptText("e.g., 3");
         TextField capacityField = new TextField();
@@ -234,10 +238,12 @@ public class CoursesPage {
         grid.add(codeField, 1, 0);
         grid.add(new Label("Course Title:"), 0, 1);
         grid.add(titleField, 1, 1);
-        grid.add(new Label("Credits:"), 0, 2);
-        grid.add(creditsField, 1, 2);
-        grid.add(new Label("Capacity:"), 0, 3);
-        grid.add(capacityField, 1, 3);
+        grid.add(new Label("Instructor:"), 0, 2);
+        grid.add(instructorField, 1, 2);
+        grid.add(new Label("Credits:"), 0, 3);
+        grid.add(creditsField, 1, 3);
+        grid.add(new Label("Capacity:"), 0, 4);
+        grid.add(capacityField, 1, 4);
 
         dialog.getDialogPane().setContent(grid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -258,6 +264,13 @@ public class CoursesPage {
                     return;
                 }
                 
+                // Validate instructor (optional)
+                ValidationResult instructorResult = ValidationUtil.validateInstructor(instructorField.getText());
+                if (!instructorResult.isValid()) {
+                    showAlert("Validation Error", instructorResult.getErrorMessage());
+                    return;
+                }
+                
                 // Validate credits
                 ValidationResult creditsResult = ValidationUtil.validateCredits(creditsField.getText());
                 if (!creditsResult.isValid()) {
@@ -275,10 +288,11 @@ public class CoursesPage {
                 try {
                     String code = codeResult.getStringValue();
                     String title = titleResult.getStringValue();
+                    String instructor = instructorResult.getStringValue(); // Can be null
                     int credits = creditsResult.getIntValue();
                     int capacity = capacityResult.getIntValue();
 
-                    courseDao.addCourse(code, title, credits, capacity);
+                    courseDao.addCourse(code, title, instructor, credits, capacity);
                     showSuccessAlert("Success", "Course added successfully!");
                     refreshPage();
                 } catch (SQLException e) {
@@ -300,6 +314,7 @@ public class CoursesPage {
 
         TextField codeField = new TextField(course.getCode());
         TextField titleField = new TextField(course.getTitle());
+        TextField instructorField = new TextField(course.getInstructor() != null ? course.getInstructor() : "");
         TextField creditsField = new TextField(String.valueOf(course.getCredits()));
         TextField capacityField = new TextField(String.valueOf(course.getCapacity()));
 
@@ -307,10 +322,12 @@ public class CoursesPage {
         grid.add(codeField, 1, 0);
         grid.add(new Label("Course Title:"), 0, 1);
         grid.add(titleField, 1, 1);
-        grid.add(new Label("Credits:"), 0, 2);
-        grid.add(creditsField, 1, 2);
-        grid.add(new Label("Capacity:"), 0, 3);
-        grid.add(capacityField, 1, 3);
+        grid.add(new Label("Instructor:"), 0, 2);
+        grid.add(instructorField, 1, 2);
+        grid.add(new Label("Credits:"), 0, 3);
+        grid.add(creditsField, 1, 3);
+        grid.add(new Label("Capacity:"), 0, 4);
+        grid.add(capacityField, 1, 4);
 
         dialog.getDialogPane().setContent(grid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -331,6 +348,13 @@ public class CoursesPage {
                     return;
                 }
                 
+                // Validate instructor (optional)
+                ValidationResult instructorResult = ValidationUtil.validateInstructor(instructorField.getText());
+                if (!instructorResult.isValid()) {
+                    showAlert("Validation Error", instructorResult.getErrorMessage());
+                    return;
+                }
+                
                 // Validate credits
                 ValidationResult creditsResult = ValidationUtil.validateCredits(creditsField.getText());
                 if (!creditsResult.isValid()) {
@@ -348,10 +372,11 @@ public class CoursesPage {
                 try {
                     String code = codeResult.getStringValue();
                     String title = titleResult.getStringValue();
+                    String instructor = instructorResult.getStringValue(); // Can be null
                     int credits = creditsResult.getIntValue();
                     int capacity = capacityResult.getIntValue();
 
-                    courseDao.updateCourse(course.getId(), code, title, credits, capacity);
+                    courseDao.updateCourse(course.getId(), code, title, instructor, credits, capacity);
                     showSuccessAlert("Success", "Course updated successfully!");
                     refreshTableRows(parentRows);
                 } catch (SQLException e) {
