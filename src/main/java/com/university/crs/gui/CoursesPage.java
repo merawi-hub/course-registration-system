@@ -3,6 +3,8 @@ package com.university.crs.gui;
 import com.university.crs.dao.CourseDao;
 import com.university.crs.model.Course;
 import com.university.crs.model.User;
+import com.university.crs.util.ValidationUtil;
+import com.university.crs.util.ValidationUtil.ValidationResult;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -242,23 +244,45 @@ public class CoursesPage {
 
         dialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                try {
-                    String code = codeField.getText().trim().toUpperCase();
-                    String title = titleField.getText().trim();
-                    int credits = Integer.parseInt(creditsField.getText().trim());
-                    int capacity = Integer.parseInt(capacityField.getText().trim());
+                // Validate course code
+                ValidationResult codeResult = ValidationUtil.validateCourseCode(codeField.getText());
+                if (!codeResult.isValid()) {
+                    showAlert("Validation Error", codeResult.getErrorMessage());
+                    return;
+                }
+                
+                // Validate course title
+                ValidationResult titleResult = ValidationUtil.validateCourseTitle(titleField.getText());
+                if (!titleResult.isValid()) {
+                    showAlert("Validation Error", titleResult.getErrorMessage());
+                    return;
+                }
+                
+                // Validate credits
+                ValidationResult creditsResult = ValidationUtil.validateCredits(creditsField.getText());
+                if (!creditsResult.isValid()) {
+                    showAlert("Validation Error", creditsResult.getErrorMessage());
+                    return;
+                }
+                
+                // Validate capacity
+                ValidationResult capacityResult = ValidationUtil.validateCapacity(capacityField.getText());
+                if (!capacityResult.isValid()) {
+                    showAlert("Validation Error", capacityResult.getErrorMessage());
+                    return;
+                }
 
-                    if (code.isEmpty() || title.isEmpty()) {
-                        showAlert("Error", "Course code and title are required.");
-                        return;
-                    }
+                try {
+                    String code = codeResult.getStringValue();
+                    String title = titleResult.getStringValue();
+                    int credits = creditsResult.getIntValue();
+                    int capacity = capacityResult.getIntValue();
 
                     courseDao.addCourse(code, title, credits, capacity);
+                    showSuccessAlert("Success", "Course added successfully!");
                     refreshPage();
-                } catch (NumberFormatException e) {
-                    showAlert("Error", "Credits and capacity must be valid numbers.");
                 } catch (SQLException e) {
-                    showAlert("Error", "Failed to add course: " + e.getMessage());
+                    showAlert("Database Error", "Failed to add course: " + e.getMessage());
                 }
             }
         });
@@ -293,23 +317,45 @@ public class CoursesPage {
 
         dialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                try {
-                    String code = codeField.getText().trim().toUpperCase();
-                    String title = titleField.getText().trim();
-                    int credits = Integer.parseInt(creditsField.getText().trim());
-                    int capacity = Integer.parseInt(capacityField.getText().trim());
+                // Validate course code
+                ValidationResult codeResult = ValidationUtil.validateCourseCode(codeField.getText());
+                if (!codeResult.isValid()) {
+                    showAlert("Validation Error", codeResult.getErrorMessage());
+                    return;
+                }
+                
+                // Validate course title
+                ValidationResult titleResult = ValidationUtil.validateCourseTitle(titleField.getText());
+                if (!titleResult.isValid()) {
+                    showAlert("Validation Error", titleResult.getErrorMessage());
+                    return;
+                }
+                
+                // Validate credits
+                ValidationResult creditsResult = ValidationUtil.validateCredits(creditsField.getText());
+                if (!creditsResult.isValid()) {
+                    showAlert("Validation Error", creditsResult.getErrorMessage());
+                    return;
+                }
+                
+                // Validate capacity
+                ValidationResult capacityResult = ValidationUtil.validateCapacity(capacityField.getText());
+                if (!capacityResult.isValid()) {
+                    showAlert("Validation Error", capacityResult.getErrorMessage());
+                    return;
+                }
 
-                    if (code.isEmpty() || title.isEmpty()) {
-                        showAlert("Error", "Course code and title are required.");
-                        return;
-                    }
+                try {
+                    String code = codeResult.getStringValue();
+                    String title = titleResult.getStringValue();
+                    int credits = creditsResult.getIntValue();
+                    int capacity = capacityResult.getIntValue();
 
                     courseDao.updateCourse(course.getId(), code, title, credits, capacity);
+                    showSuccessAlert("Success", "Course updated successfully!");
                     refreshTableRows(parentRows);
-                } catch (NumberFormatException e) {
-                    showAlert("Error", "Credits and capacity must be valid numbers.");
                 } catch (SQLException e) {
-                    showAlert("Error", "Failed to update course: " + e.getMessage());
+                    showAlert("Database Error", "Failed to update course: " + e.getMessage());
                 }
             }
         });
@@ -368,6 +414,14 @@ public class CoursesPage {
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
+    private void showSuccessAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
