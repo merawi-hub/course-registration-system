@@ -93,6 +93,7 @@ public class AdminDashboard {
         
         Button dashboardBtn = navButton("🏠", "Dashboard", true, () -> showPage(new OverviewPage(user).build()));
         Button coursesBtn = navButton("📚", "Manage Courses", false, () -> showPage(new CoursesPage(stage, user).build()));
+        Button instructorsBtn = navButton("👨‍🏫", "Manage Instructors", false, () -> showPage(new InstructorsPage(stage, user).build()));
         Button studentsBtn = navButton("👥", "Manage Students", false, () -> showPage(new StudentsPage(stage, user).build()));
         Button registrationsBtn = navButton("📋", "Registrations", false, () -> showPage(new EnrollmentsPage(stage, user).build()));
         Button reportsBtn = navButton("📊", "Reports", false, () -> showPage(new ReportsPage().build()));
@@ -102,6 +103,7 @@ public class AdminDashboard {
         navBox.getChildren().addAll(
             dashboardBtn,
             coursesBtn,
+            instructorsBtn,
             studentsBtn,
             registrationsBtn,
             reportsBtn,

@@ -23,17 +23,29 @@ public class DatabaseInitializer {
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """);
+            
+            // Instructors table
+            stmt.executeUpdate("""
+                CREATE TABLE IF NOT EXISTS instructors (
+                    id         INT AUTO_INCREMENT PRIMARY KEY,
+                    name       VARCHAR(100) NOT NULL,
+                    email      VARCHAR(100) NOT NULL UNIQUE,
+                    department VARCHAR(100) NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """);
 
             // Courses table
             stmt.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS courses (
-                    id         INT AUTO_INCREMENT PRIMARY KEY,
-                    code       VARCHAR(20)  NOT NULL UNIQUE,
-                    title      VARCHAR(150) NOT NULL,
-                    instructor VARCHAR(100) NULL,
-                    credits    INT          NOT NULL,
-                    capacity   INT          NOT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    id            INT AUTO_INCREMENT PRIMARY KEY,
+                    code          VARCHAR(20)  NOT NULL UNIQUE,
+                    title         VARCHAR(150) NOT NULL,
+                    instructor_id INT NULL,
+                    credits       INT          NOT NULL,
+                    capacity      INT          NOT NULL,
+                    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (instructor_id) REFERENCES instructors(id) ON DELETE SET NULL
                 )
             """);
 
@@ -71,15 +83,25 @@ public class DatabaseInitializer {
             
             // Migration: Add instructor column if it doesn't exist (for existing databases)
             try {
+                // Drop old instructor text column if it exists
+                stmt.executeUpdate("ALTER TABLE courses DROP COLUMN instructor");
+                System.out.println("Removed old instructor text column.");
+            } catch (SQLException e) {
+                // Column doesn't exist, that's fine
+            }
+            
+            // Add instructor_id foreign key if it doesn't exist
+            try {
                 stmt.executeUpdate("""
                     ALTER TABLE courses 
-                    ADD COLUMN instructor VARCHAR(100) NULL AFTER title
+                    ADD COLUMN instructor_id INT NULL,
+                    ADD FOREIGN KEY (instructor_id) REFERENCES instructors(id) ON DELETE SET NULL
                 """);
-                System.out.println("Added instructor column to courses table.");
+                System.out.println("Added instructor_id foreign key to courses table.");
             } catch (SQLException e) {
                 // Column already exists, ignore
                 if (!e.getMessage().contains("Duplicate column")) {
-                    System.out.println("Instructor column already exists or migration not needed.");
+                    System.out.println("Instructor_id column already exists or migration not needed.");
                 }
             }
 

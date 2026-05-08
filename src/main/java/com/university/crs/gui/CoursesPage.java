@@ -1,7 +1,9 @@
 package com.university.crs.gui;
 
 import com.university.crs.dao.CourseDao;
+import com.university.crs.dao.InstructorDao;
 import com.university.crs.model.Course;
+import com.university.crs.model.Instructor;
 import com.university.crs.model.User;
 import com.university.crs.util.ValidationUtil;
 import com.university.crs.util.ValidationUtil.ValidationResult;
@@ -24,6 +26,7 @@ public class CoursesPage {
     private final Stage stage;
     private final User  user;
     private final CourseDao courseDao = new CourseDao();
+    private final InstructorDao instructorDao = new InstructorDao();
     private VBox mainContainer; // Store reference to main container
 
     public CoursesPage(Stage stage, User user) {
@@ -134,7 +137,7 @@ public class CoursesPage {
         
         Label col1 = createCellLabel(course.getCode(), 120);
         Label col2 = createCellLabel(course.getTitle(), 280);
-        Label col3 = createCellLabel(course.getInstructor() != null ? course.getInstructor() : "TBA", 180);
+        Label col3 = createCellLabel(course.getInstructorName() != null ? course.getInstructorName() : "TBA", 180);
         Label col4 = createCellLabel(String.valueOf(course.getCredits()), 80);
         Label col5 = createCellLabel(String.valueOf(course.getCapacity()), 80);
         
@@ -225,12 +228,28 @@ public class CoursesPage {
 
         TextField codeField = new TextField();
         codeField.setPromptText("e.g., CS101");
+        
         TextField titleField = new TextField();
         titleField.setPromptText("e.g., Introduction to Computer Science");
-        TextField instructorField = new TextField();
-        instructorField.setPromptText("e.g., Dr. John Smith (optional)");
+        
+        // Instructor dropdown
+        ComboBox<String> instructorCombo = new ComboBox<>();
+        instructorCombo.setPromptText("Select instructor (optional)");
+        instructorCombo.getItems().add("-- No Instructor --");
+        try {
+            List<Instructor> instructors = instructorDao.getAllInstructors();
+            for (Instructor instructor : instructors) {
+                instructorCombo.getItems().add(instructor.getId() + ": " + instructor.getName());
+            }
+        } catch (SQLException e) {
+            System.err.println("Error loading instructors: " + e.getMessage());
+        }
+        instructorCombo.setValue("-- No Instructor --");
+        instructorCombo.setPrefWidth(250);
+        
         TextField creditsField = new TextField();
         creditsField.setPromptText("e.g., 3");
+        
         TextField capacityField = new TextField();
         capacityField.setPromptText("e.g., 30");
 
@@ -239,7 +258,7 @@ public class CoursesPage {
         grid.add(new Label("Course Title:"), 0, 1);
         grid.add(titleField, 1, 1);
         grid.add(new Label("Instructor:"), 0, 2);
-        grid.add(instructorField, 1, 2);
+        grid.add(instructorCombo, 1, 2);
         grid.add(new Label("Credits:"), 0, 3);
         grid.add(creditsField, 1, 3);
         grid.add(new Label("Capacity:"), 0, 4);
@@ -264,11 +283,15 @@ public class CoursesPage {
                     return;
                 }
                 
-                // Validate instructor (optional)
-                ValidationResult instructorResult = ValidationUtil.validateInstructor(instructorField.getText());
-                if (!instructorResult.isValid()) {
-                    showAlert("Validation Error", instructorResult.getErrorMessage());
-                    return;
+                // Get instructor ID from dropdown
+                Integer instructorId = null;
+                String selectedInstructor = instructorCombo.getValue();
+                if (selectedInstructor != null && !selectedInstructor.equals("-- No Instructor --")) {
+                    try {
+                        instructorId = Integer.parseInt(selectedInstructor.split(":")[0]);
+                    } catch (Exception e) {
+                        // Invalid format, leave as null
+                    }
                 }
                 
                 // Validate credits
@@ -288,11 +311,10 @@ public class CoursesPage {
                 try {
                     String code = codeResult.getStringValue();
                     String title = titleResult.getStringValue();
-                    String instructor = instructorResult.getStringValue(); // Can be null
                     int credits = creditsResult.getIntValue();
                     int capacity = capacityResult.getIntValue();
 
-                    courseDao.addCourse(code, title, instructor, credits, capacity);
+                    courseDao.addCourse(code, title, instructorId, credits, capacity);
                     showSuccessAlert("Success", "Course added successfully!");
                     refreshPage();
                 } catch (SQLException e) {
@@ -314,7 +336,28 @@ public class CoursesPage {
 
         TextField codeField = new TextField(course.getCode());
         TextField titleField = new TextField(course.getTitle());
-        TextField instructorField = new TextField(course.getInstructor() != null ? course.getInstructor() : "");
+        
+        // Instructor dropdown
+        ComboBox<String> instructorCombo = new ComboBox<>();
+        instructorCombo.setPromptText("Select instructor (optional)");
+        instructorCombo.getItems().add("-- No Instructor --");
+        try {
+            List<Instructor> instructors = instructorDao.getAllInstructors();
+            for (Instructor instructor : instructors) {
+                instructorCombo.getItems().add(instructor.getId() + ": " + instructor.getName());
+            }
+            // Set current instructor
+            if (course.getInstructorId() != null) {
+                instructorCombo.setValue(course.getInstructorId() + ": " + course.getInstructorName());
+            } else {
+                instructorCombo.setValue("-- No Instructor --");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error loading instructors: " + e.getMessage());
+            instructorCombo.setValue("-- No Instructor --");
+        }
+        instructorCombo.setPrefWidth(250);
+        
         TextField creditsField = new TextField(String.valueOf(course.getCredits()));
         TextField capacityField = new TextField(String.valueOf(course.getCapacity()));
 
@@ -323,7 +366,7 @@ public class CoursesPage {
         grid.add(new Label("Course Title:"), 0, 1);
         grid.add(titleField, 1, 1);
         grid.add(new Label("Instructor:"), 0, 2);
-        grid.add(instructorField, 1, 2);
+        grid.add(instructorCombo, 1, 2);
         grid.add(new Label("Credits:"), 0, 3);
         grid.add(creditsField, 1, 3);
         grid.add(new Label("Capacity:"), 0, 4);
@@ -348,11 +391,15 @@ public class CoursesPage {
                     return;
                 }
                 
-                // Validate instructor (optional)
-                ValidationResult instructorResult = ValidationUtil.validateInstructor(instructorField.getText());
-                if (!instructorResult.isValid()) {
-                    showAlert("Validation Error", instructorResult.getErrorMessage());
-                    return;
+                // Get instructor ID from dropdown
+                Integer instructorId = null;
+                String selectedInstructor = instructorCombo.getValue();
+                if (selectedInstructor != null && !selectedInstructor.equals("-- No Instructor --")) {
+                    try {
+                        instructorId = Integer.parseInt(selectedInstructor.split(":")[0]);
+                    } catch (Exception e) {
+                        // Invalid format, leave as null
+                    }
                 }
                 
                 // Validate credits
@@ -372,11 +419,10 @@ public class CoursesPage {
                 try {
                     String code = codeResult.getStringValue();
                     String title = titleResult.getStringValue();
-                    String instructor = instructorResult.getStringValue(); // Can be null
                     int credits = creditsResult.getIntValue();
                     int capacity = capacityResult.getIntValue();
 
-                    courseDao.updateCourse(course.getId(), code, title, instructor, credits, capacity);
+                    courseDao.updateCourse(course.getId(), code, title, instructorId, credits, capacity);
                     showSuccessAlert("Success", "Course updated successfully!");
                     refreshTableRows(parentRows);
                 } catch (SQLException e) {

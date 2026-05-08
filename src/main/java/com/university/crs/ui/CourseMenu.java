@@ -68,9 +68,12 @@ public class CourseMenu {
             String code = scanner.nextLine().trim().toUpperCase();
             System.out.print("  Title    : ");
             String title = scanner.nextLine().trim();
-            System.out.print("  Instructor (optional): ");
-            String instructor = scanner.nextLine().trim();
-            if (instructor.isEmpty()) instructor = null;
+            System.out.print("  Instructor ID (optional, 0 for none): ");
+            String instructorIdStr = scanner.nextLine().trim();
+            Integer instructorId = null;
+            if (!instructorIdStr.isEmpty() && !instructorIdStr.equals("0")) {
+                instructorId = Integer.parseInt(instructorIdStr);
+            }
             System.out.print("  Credits  : ");
             int credits = Integer.parseInt(scanner.nextLine().trim());
             System.out.print("  Capacity : ");
@@ -80,10 +83,10 @@ public class CourseMenu {
                 System.out.println("  [!] Code and title cannot be empty.");
                 return;
             }
-            courseDao.addCourse(code, title, instructor, credits, capacity);
+            courseDao.addCourse(code, title, instructorId, credits, capacity);
             System.out.println("  [✓] Course added successfully.");
         } catch (NumberFormatException e) {
-            System.out.println("  [!] Credits and capacity must be numbers.");
+            System.out.println("  [!] Credits, capacity, and instructor ID must be numbers.");
         } catch (SQLException e) {
             if (e.getMessage().contains("Duplicate")) {
                 System.out.println("  [!] A course with that code already exists.");
@@ -108,8 +111,8 @@ public class CourseMenu {
             String code = scanner.nextLine().trim().toUpperCase();
             System.out.print("  New Title    (leave blank to keep): ");
             String title = scanner.nextLine().trim();
-            System.out.print("  New Instructor (leave blank to keep): ");
-            String instructor = scanner.nextLine().trim();
+            System.out.print("  New Instructor ID (leave blank to keep, 0 for none): ");
+            String instructorIdStr = scanner.nextLine().trim();
             System.out.print("  New Credits  (leave blank to keep): ");
             String creditsStr = scanner.nextLine().trim();
             System.out.print("  New Capacity (leave blank to keep): ");
@@ -117,11 +120,18 @@ public class CourseMenu {
 
             code     = code.isEmpty()     ? existing.getCode()     : code;
             title    = title.isEmpty()    ? existing.getTitle()    : title;
-            instructor = instructor.isEmpty() ? existing.getInstructor() : instructor;
+            Integer instructorId = existing.getInstructorId();
+            if (!instructorIdStr.isEmpty()) {
+                if (instructorIdStr.equals("0")) {
+                    instructorId = null;
+                } else {
+                    instructorId = Integer.parseInt(instructorIdStr);
+                }
+            }
             int credits  = creditsStr.isEmpty()  ? existing.getCredits()  : Integer.parseInt(creditsStr);
             int capacity = capacityStr.isEmpty() ? existing.getCapacity() : Integer.parseInt(capacityStr);
 
-            if (courseDao.updateCourse(id, code, title, instructor, credits, capacity)) {
+            if (courseDao.updateCourse(id, code, title, instructorId, credits, capacity)) {
                 System.out.println("  [✓] Course updated successfully.");
             } else {
                 System.out.println("  [!] Update failed.");
