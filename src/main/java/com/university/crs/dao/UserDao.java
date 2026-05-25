@@ -4,6 +4,8 @@ import com.university.crs.db.DatabaseConnection;
 import com.university.crs.model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data access object for user authentication and registration.
@@ -11,7 +13,7 @@ import java.sql.*;
 public class UserDao {
 
     public User login(String username, String password) throws SQLException {
-        String sql = "SELECT id, username, role, student_id FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT id, username, role, student_id, approved, full_name, email, department FROM users WHERE username = ? AND password = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -23,20 +25,29 @@ public class UserDao {
                             rs.getInt("id"),
                             rs.getString("username"),
                             rs.getString("role"),
-                            rs.wasNull() ? null : sid);
+                            rs.wasNull() ? null : sid,
+                            rs.getBoolean("approved"),
+                            rs.getString("full_name"),
+                            rs.getString("email"),
+                            rs.getString("department"));
                 }
             }
         }
         return null;
     }
 
-    public void createAccount(String username, String password, String role) throws SQLException {
-        String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
+    public void createAccount(String username, String password, String role, String fullName, String email, String department) throws SQLException {
+        String sql = "INSERT INTO users (username, password, role, full_name, email, department, approved) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.setString(3, role);
+            stmt.setString(4, fullName);
+            stmt.setString(5, email);
+            stmt.setString(6, department);
+            // Students need approval, admins are auto-approved
+            stmt.setBoolean(7, "ADMIN".equals(role));
             stmt.executeUpdate();
         }
     }
@@ -49,6 +60,55 @@ public class UserDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
+        }
+    }
+    
+    /**
+     * Get all pending student accounts (not approved yet)
+     */
+    public List<User> getPendingStudents() throws SQLException {
+        List<User> pending = new ArrayList<>();
+        String sql = "SELECT id, username, role, student_id, approved, full_name, email, department FROM users WHERE role = 'STUDENT' AND approved = FALSE ORDER BY created_at DESC";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                int sid = rs.getInt("student_id");
+                pending.add(new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("role"),
+                        rs.wasNull() ? null : sid,
+                        rs.getBoolean("approved"),
+                        rs.getString("full_name"),
+                        rs.getString("email"),
+                        rs.getString("department")));
+            }
+        }
+        return pending;
+    }
+    
+    /**
+     * Approve a student account
+     */
+    public boolean approveStudent(int userId) throws SQLException {
+        String sql = "UPDATE users SET approved = TRUE WHERE id = ? AND role = 'STUDENT'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+    
+    /**
+     * Reject (delete) a student account
+     */
+    public boolean rejectStudent(int userId) throws SQLException {
+        String sql = "DELETE FROM users WHERE id = ? AND role = 'STUDENT' AND approved = FALSE";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            return stmt.executeUpdate() > 0;
         }
     }
 }

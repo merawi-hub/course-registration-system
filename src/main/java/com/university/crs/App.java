@@ -18,7 +18,16 @@ public class App extends Application {
         
         // Show splash screen first, then login screen
         new SplashScreen(primaryStage, () -> {
-            new LoginScreen(primaryStage).show();
+            LoginScreen loginScreen = new LoginScreen(primaryStage);
+            loginScreen.show();
+            
+            // Apply global stylesheet
+            try {
+                String css = getClass().getResource("/styles.css").toExternalForm();
+                primaryStage.getScene().getStylesheets().add(css);
+            } catch (Exception e) {
+                System.err.println("Could not load styles.css: " + e.getMessage());
+            }
         }).show();
     }
 

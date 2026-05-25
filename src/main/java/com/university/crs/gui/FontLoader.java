@@ -5,63 +5,71 @@ import javafx.scene.text.FontWeight;
 
 /**
  * Utility class for loading and managing custom fonts.
- * Uses Poppins for headings and Inter for body text.
+ * Uses Outfit font from Google Fonts for the entire system.
  * Falls back to system fonts if custom fonts are not available.
  */
 public class FontLoader {
     
-    private static final String POPPINS_REGULAR = "Poppins";
-    private static final String POPPINS_BOLD = "Poppins";
-    private static final String INTER_REGULAR = "Inter";
+    private static final String OUTFIT = "Outfit";
     
-    // Fallback fonts
-    private static final String FALLBACK_HEADING = "Segoe UI";
-    private static final String FALLBACK_BODY = "Segoe UI";
+    // Fallback font
+    private static final String FALLBACK = "Segoe UI";
     
     /**
-     * Get Poppins font for headings
+     * Get Outfit font (regular weight)
      */
-    public static Font getPoppins(double size) {
-        Font font = Font.font(POPPINS_REGULAR, size);
-        if (font.getFamily().equals(POPPINS_REGULAR)) {
+    public static Font getOutfit(double size) {
+        Font font = Font.font(OUTFIT, size);
+        if (font.getFamily().equals(OUTFIT)) {
             return font;
         }
-        return Font.font(FALLBACK_HEADING, size);
+        return Font.font(FALLBACK, size);
     }
     
     /**
-     * Get Poppins Bold font for headings
+     * Get Outfit font (bold weight)
      */
-    public static Font getPoppinsBold(double size) {
-        Font font = Font.font(POPPINS_BOLD, FontWeight.BOLD, size);
-        if (font.getFamily().equals(POPPINS_BOLD)) {
+    public static Font getOutfitBold(double size) {
+        Font font = Font.font(OUTFIT, FontWeight.BOLD, size);
+        if (font.getFamily().equals(OUTFIT)) {
             return font;
         }
-        return Font.font(FALLBACK_HEADING, FontWeight.BOLD, size);
+        return Font.font(FALLBACK, FontWeight.BOLD, size);
     }
     
     /**
-     * Get Inter font for body text
+     * Get Outfit font (semi-bold weight)
      */
-    public static Font getInter(double size) {
-        Font font = Font.font(INTER_REGULAR, size);
-        if (font.getFamily().equals(INTER_REGULAR)) {
+    public static Font getOutfitSemiBold(double size) {
+        Font font = Font.font(OUTFIT, FontWeight.SEMI_BOLD, size);
+        if (font.getFamily().equals(OUTFIT)) {
             return font;
         }
-        return Font.font(FALLBACK_BODY, size);
+        return Font.font(FALLBACK, FontWeight.SEMI_BOLD, size);
+    }
+    
+    /**
+     * Get Outfit font (medium weight)
+     */
+    public static Font getOutfitMedium(double size) {
+        Font font = Font.font(OUTFIT, FontWeight.MEDIUM, size);
+        if (font.getFamily().equals(OUTFIT)) {
+            return font;
+        }
+        return Font.font(FALLBACK, FontWeight.MEDIUM, size);
     }
     
     /**
      * Get font family name for CSS
      */
-    public static String getPoppinsFontFamily() {
-        return "'" + POPPINS_REGULAR + "', '" + FALLBACK_HEADING + "'";
+    public static String getOutfitFontFamily() {
+        return "'" + OUTFIT + "', '" + FALLBACK + "'";
     }
     
-    /**
-     * Get font family name for CSS
-     */
-    public static String getInterFontFamily() {
-        return "'" + INTER_REGULAR + "', '" + FALLBACK_BODY + "'";
-    }
+    // Legacy method names for backward compatibility
+    public static Font getPoppins(double size) { return getOutfit(size); }
+    public static Font getPoppinsBold(double size) { return getOutfitBold(size); }
+    public static Font getInter(double size) { return getOutfit(size); }
+    public static String getPoppinsFontFamily() { return getOutfitFontFamily(); }
+    public static String getInterFontFamily() { return getOutfitFontFamily(); }
 }

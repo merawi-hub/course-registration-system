@@ -57,15 +57,19 @@ public class DatabaseInitializer {
                     password   VARCHAR(255) NOT NULL,
                     role       ENUM('ADMIN','STUDENT') NOT NULL DEFAULT 'ADMIN',
                     student_id INT NULL,
+                    approved   BOOLEAN NOT NULL DEFAULT FALSE,
+                    full_name  VARCHAR(100) NULL,
+                    email      VARCHAR(100) NULL,
+                    department VARCHAR(100) NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE SET NULL
                 )
             """);
 
-            // Seed default admin
+            // Seed default admin (admins are auto-approved)
             stmt.executeUpdate("""
-                INSERT IGNORE INTO users (username, password, role)
-                VALUES ('admin', 'admin123', 'ADMIN')
+                INSERT IGNORE INTO users (username, password, role, approved)
+                VALUES ('admin', 'admin123', 'ADMIN', TRUE)
             """);
 
             // Enrollments table
@@ -103,6 +107,43 @@ public class DatabaseInitializer {
                 if (!e.getMessage().contains("Duplicate column")) {
                     System.out.println("Instructor_id column already exists or migration not needed.");
                 }
+            }
+            
+            // Migration: Add approval fields to users table if they don't exist
+            try {
+                stmt.executeUpdate("ALTER TABLE users ADD COLUMN approved BOOLEAN NOT NULL DEFAULT FALSE");
+                System.out.println("Added approved column to users table.");
+            } catch (SQLException e) {
+                // Column already exists
+            }
+            
+            try {
+                stmt.executeUpdate("ALTER TABLE users ADD COLUMN full_name VARCHAR(100) NULL");
+                System.out.println("Added full_name column to users table.");
+            } catch (SQLException e) {
+                // Column already exists
+            }
+            
+            try {
+                stmt.executeUpdate("ALTER TABLE users ADD COLUMN email VARCHAR(100) NULL");
+                System.out.println("Added email column to users table.");
+            } catch (SQLException e) {
+                // Column already exists
+            }
+            
+            try {
+                stmt.executeUpdate("ALTER TABLE users ADD COLUMN department VARCHAR(100) NULL");
+                System.out.println("Added department column to users table.");
+            } catch (SQLException e) {
+                // Column already exists
+            }
+            
+            // Ensure existing admin accounts are approved
+            try {
+                stmt.executeUpdate("UPDATE users SET approved = TRUE WHERE role = 'ADMIN'");
+                System.out.println("Ensured all admin accounts are approved.");
+            } catch (SQLException e) {
+                System.err.println("Error updating admin approval status: " + e.getMessage());
             }
 
         } catch (SQLException e) {

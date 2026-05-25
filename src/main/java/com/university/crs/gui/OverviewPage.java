@@ -3,20 +3,20 @@ package com.university.crs.gui;
 import com.university.crs.dao.CourseDao;
 import com.university.crs.dao.EnrollmentDao;
 import com.university.crs.dao.StudentDao;
+import com.university.crs.dao.UserDao;
 import com.university.crs.model.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.sql.SQLException;
 
 /**
  * Overview / home page showing summary stat cards and recent registrations.
+ * Matches the client dashboard design.
  */
 public class OverviewPage {
 
@@ -27,193 +27,247 @@ public class OverviewPage {
     }
 
     public Node build() {
-        VBox page = new VBox(30);
-        page.setPadding(new Insets(40, 50, 40, 50));
-        page.setStyle("-fx-background-color: " + ColorScheme.BACKGROUND_HEX + ";");
+        VBox page = new VBox(StyleConstants.SPACING_XL);
+        page.setPadding(new Insets(0));
+        page.setStyle("-fx-background-color: transparent;");
 
-        // Page heading
+        // Page header
+        VBox header = new VBox(4);
         Label heading = new Label("Admin Dashboard");
-        heading.setFont(FontLoader.getPoppinsBold(28));
-        heading.setTextFill(ColorScheme.DARK_TEXT);
+        heading.setFont(FontLoader.getOutfitSemiBold(24));
+        heading.setTextFill(ColorScheme.GRAY_900);
+        
+        Label subtitle = new Label("Overview of your course registration system");
+        subtitle.setFont(FontLoader.getOutfit(14));
+        subtitle.setTextFill(ColorScheme.GRAY_500);
+        
+        header.getChildren().addAll(heading, subtitle);
 
-        // Stat cards
-        int students = 0, courses = 0, enrollments = 0, departments = 8;
+        // Fetch stats
+        int pendingApprovals = 0, totalStudents = 0, totalCourses = 0, totalEnrollments = 0;
         try {
-            students    = new StudentDao().getAllStudents().size();
-            courses     = new CourseDao().getAllCourses().size();
-            enrollments = new EnrollmentDao().getEnrollmentSummary().size();
+            pendingApprovals = new UserDao().getPendingStudents().size();
+            totalStudents = new StudentDao().getAllStudents().size();
+            totalCourses = new CourseDao().getAllCourses().size();
+            totalEnrollments = new EnrollmentDao().getEnrollmentSummary().size();
         } catch (SQLException ignored) {}
 
-        HBox cards = new HBox(25);
-        cards.getChildren().addAll(
-                statCard("👥", "Total Students", String.valueOf(students), ColorScheme.LIGHT_BLUE_HEX),
-                statCard("📚", "Total Courses", String.valueOf(courses), ColorScheme.SUCCESS_HEX),
-                statCard("📋", "Total Registrations", String.valueOf(enrollments), ColorScheme.PURPLE_HEX),
-                statCard("🏢", "Departments", String.valueOf(departments), ColorScheme.WARNING_HEX)
-        );
+        // KPI Cards Grid
+        GridPane cardsGrid = new GridPane();
+        cardsGrid.setHgap(StyleConstants.SPACING_XL);
+        cardsGrid.setVgap(StyleConstants.SPACING_XL);
+        
+        // Make columns equal width
+        for (int i = 0; i < 4; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPercentWidth(25);
+            col.setHgrow(Priority.ALWAYS);
+            cardsGrid.getColumnConstraints().add(col);
+        }
+
+        // Add KPI cards
+        cardsGrid.add(createKPICard("Pending Approvals", String.valueOf(pendingApprovals), 
+            pendingApprovals > 0 ? "Needs attention" : "All approved", 
+            pendingApprovals > 0 ? ColorScheme.ERROR_500 : ColorScheme.GRAY_400,
+            pendingApprovals > 0), 0, 0);
+        
+        cardsGrid.add(createKPICard("Total Students", String.valueOf(totalStudents), 
+            "registered students", ColorScheme.GRAY_400, false), 1, 0);
+        
+        cardsGrid.add(createKPICard("Total Courses", String.valueOf(totalCourses), 
+            "available courses", ColorScheme.GRAY_400, false), 2, 0);
+        
+        cardsGrid.add(createKPICard("Total Enrollments", String.valueOf(totalEnrollments), 
+            "course registrations", ColorScheme.GRAY_400, false), 3, 0);
 
         // Recent Registrations Section
         VBox recentSection = buildRecentRegistrations();
 
-        page.getChildren().addAll(heading, cards, recentSection);
+        page.getChildren().addAll(header, cardsGrid, recentSection);
         
         ScrollPane scrollPane = new ScrollPane(page);
         scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background: " + ColorScheme.BACKGROUND_HEX + "; -fx-background-color: " + ColorScheme.BACKGROUND_HEX + ";");
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         
         return scrollPane;
     }
 
-    private VBox statCard(String icon, String title, String value, String color) {
-        VBox card = new VBox(12);
-        card.setPrefSize(220, 120);
+    /**
+     * Create a KPI card matching the client design
+     */
+    private VBox createKPICard(String title, String value, String subtitle, javafx.scene.paint.Color subtitleColor, boolean showBadge) {
+        VBox card = new VBox(StyleConstants.SPACING_SM);
         card.setAlignment(Pos.TOP_LEFT);
-        card.setPadding(new Insets(20));
-        card.setStyle(
-            "-fx-background-color: white; " +
-            "-fx-background-radius: 12; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 15, 0, 0, 3);"
-        );
-
-        // Icon with colored background
-        StackPane iconContainer = new StackPane();
-        iconContainer.setPrefSize(50, 50);
-        iconContainer.setStyle(
-            "-fx-background-color: " + color + "; " +
-            "-fx-background-radius: 10;"
-        );
+        card.setPadding(new Insets(StyleConstants.SPACING_XL));
+        card.setStyle(StyleConstants.card());
+        card.setPrefHeight(120);
         
-        Label iconLabel = new Label(icon);
-        iconLabel.setFont(FontLoader.getInter(26));
-        iconLabel.setTextFill(Color.WHITE);
-        iconContainer.getChildren().add(iconLabel);
-
-        // Title
+        // Header row with title and optional badge
+        HBox headerRow = new HBox();
+        headerRow.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(headerRow, Priority.ALWAYS);
+        
         Label titleLabel = new Label(title);
-        titleLabel.setFont(FontLoader.getInter(13));
-        titleLabel.setTextFill(Color.rgb(120, 120, 120));
-
-        // Value
+        titleLabel.setFont(FontLoader.getOutfitMedium(14));
+        titleLabel.setTextFill(ColorScheme.GRAY_500);
+        
+        headerRow.getChildren().add(titleLabel);
+        
+        // Badge for pending approvals
+        if (showBadge && !value.equals("0")) {
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            
+            Label badge = new Label(value);
+            badge.setFont(FontLoader.getOutfitBold(12));
+            badge.setTextFill(javafx.scene.paint.Color.WHITE);
+            badge.setStyle(String.format(
+                "-fx-background-color: %s; " +
+                "-fx-background-radius: %.0fpx; " +
+                "-fx-padding: 2 8; " +
+                "-fx-min-width: 24; " +
+                "-fx-min-height: 24; " +
+                "-fx-alignment: center;",
+                ColorScheme.ERROR_500_HEX,
+                StyleConstants.RADIUS_FULL
+            ));
+            
+            headerRow.getChildren().addAll(spacer, badge);
+        }
+        
+        // Value (large number)
         Label valueLabel = new Label(value);
-        valueLabel.setFont(FontLoader.getPoppinsBold(32));
-        valueLabel.setTextFill(ColorScheme.DARK_TEXT);
-
-        card.getChildren().addAll(iconContainer, titleLabel, valueLabel);
+        valueLabel.setFont(FontLoader.getOutfitSemiBold(36));
+        valueLabel.setTextFill(ColorScheme.GRAY_900);
+        
+        // Subtitle
+        Label subtitleLabel = new Label(subtitle);
+        subtitleLabel.setFont(FontLoader.getOutfit(12));
+        subtitleLabel.setTextFill(subtitleColor);
+        
+        card.getChildren().addAll(headerRow, valueLabel, subtitleLabel);
+        
+        // Hover effect for pending approvals card
+        if (showBadge && !value.equals("0")) {
+            card.setOnMouseEntered(e -> card.setStyle(
+                StyleConstants.card() + 
+                "-fx-border-color: " + ColorScheme.ERROR_300_HEX + "; " +
+                "-fx-cursor: hand;"
+            ));
+            card.setOnMouseExited(e -> card.setStyle(StyleConstants.card()));
+        }
+        
         return card;
     }
 
     private VBox buildRecentRegistrations() {
-        VBox section = new VBox(20);
+        VBox section = new VBox(StyleConstants.SPACING_LG);
         
-        Label sectionTitle = new Label("Recent Registrations");
-        sectionTitle.setFont(FontLoader.getPoppinsBold(20));
-        sectionTitle.setTextFill(ColorScheme.DARK_TEXT);
-
-        // Table container
-        VBox tableContainer = new VBox();
-        tableContainer.setStyle(
-            "-fx-background-color: white; " +
-            "-fx-background-radius: 12; " +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 15, 0, 0, 3);"
-        );
-        tableContainer.setPadding(new Insets(25));
-
-        // Table header
-        HBox header = new HBox();
-        header.setSpacing(20);
-        header.setPadding(new Insets(0, 0, 15, 0));
-        header.setStyle("-fx-border-color: #e5e7eb; -fx-border-width: 0 0 1 0;");
+        // Section header
+        HBox sectionHeader = new HBox();
+        sectionHeader.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(sectionHeader, Priority.ALWAYS);
         
-        Label col1 = createHeaderLabel("Student Name", 250);
-        Label col2 = createHeaderLabel("Course Name", 350);
-        Label col3 = createHeaderLabel("Date", 150);
+        Label sectionTitle = new Label("System Overview");
+        sectionTitle.setFont(FontLoader.getOutfitSemiBold(18));
+        sectionTitle.setTextFill(ColorScheme.GRAY_900);
         
-        header.getChildren().addAll(col1, col2, col3);
+        sectionHeader.getChildren().add(sectionTitle);
 
-        // Table rows
-        VBox rows = new VBox(0);
-        rows.getChildren().addAll(
-            createTableRow("John Doe", "CS101 - Introduction to CS", "2024-06-20"),
-            createTableRow("Jane Smith", "MATH201 - Discrete Math", "2024-06-20"),
-            createTableRow("Mike Johnson", "ENG101 - English Comm.", "2024-05-19"),
-            createTableRow("Sarah Williams", "PHY101 - Physics Fund.", "2024-05-19")
-        );
+        // Info card
+        VBox infoCard = new VBox(StyleConstants.SPACING_LG);
+        infoCard.setStyle(StyleConstants.card());
+        infoCard.setPadding(new Insets(StyleConstants.SPACING_XL));
 
-        // View All button
-        Button viewAllBtn = new Button("View All");
-        viewAllBtn.setFont(FontLoader.getPoppinsBold(14));
-        viewAllBtn.setTextFill(Color.WHITE);
-        viewAllBtn.setPrefWidth(150);
-        viewAllBtn.setPrefHeight(45);
-        viewAllBtn.setStyle(
-            "-fx-background-color: " + ColorScheme.BUTTON_PRIMARY_HEX + "; " +
-            "-fx-background-radius: 8; " +
-            "-fx-cursor: hand;"
-        );
-        viewAllBtn.setOnMouseEntered(e -> viewAllBtn.setStyle(
-            "-fx-background-color: " + ColorScheme.BUTTON_HOVER_HEX + "; " +
-            "-fx-background-radius: 8; " +
-            "-fx-cursor: hand;"
-        ));
-        viewAllBtn.setOnMouseExited(e -> viewAllBtn.setStyle(
-            "-fx-background-color: " + ColorScheme.BUTTON_PRIMARY_HEX + "; " +
-            "-fx-background-radius: 8; " +
-            "-fx-cursor: hand;"
-        ));
+        // Welcome message
+        Label welcomeLabel = new Label("Welcome to the Course Registration System");
+        welcomeLabel.setFont(FontLoader.getOutfitSemiBold(16));
+        welcomeLabel.setTextFill(ColorScheme.GRAY_900);
+        
+        Label descLabel = new Label("Manage courses, instructors, students, and enrollments from this dashboard.");
+        descLabel.setFont(FontLoader.getOutfit(14));
+        descLabel.setTextFill(ColorScheme.GRAY_500);
+        descLabel.setWrapText(true);
 
-        HBox buttonContainer = new HBox(viewAllBtn);
-        buttonContainer.setAlignment(Pos.CENTER);
-        buttonContainer.setPadding(new Insets(20, 0, 0, 0));
+        // Quick actions grid
+        GridPane actionsGrid = new GridPane();
+        actionsGrid.setHgap(StyleConstants.SPACING_LG);
+        actionsGrid.setVgap(StyleConstants.SPACING_LG);
+        actionsGrid.setPadding(new Insets(StyleConstants.SPACING_LG, 0, 0, 0));
+        
+        for (int i = 0; i < 3; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPercentWidth(33.33);
+            col.setHgrow(Priority.ALWAYS);
+            actionsGrid.getColumnConstraints().add(col);
+        }
 
-        tableContainer.getChildren().addAll(header, rows, buttonContainer);
-        section.getChildren().addAll(sectionTitle, tableContainer);
+        // Quick action cards
+        actionsGrid.add(createQuickActionCard("📚", "Manage Courses", "Add, edit, or remove courses"), 0, 0);
+        actionsGrid.add(createQuickActionCard("👥", "Manage Students", "View and manage student accounts"), 1, 0);
+        actionsGrid.add(createQuickActionCard("📊", "View Reports", "Generate enrollment and course reports"), 2, 0);
+
+        infoCard.getChildren().addAll(welcomeLabel, descLabel, actionsGrid);
+        section.getChildren().addAll(sectionHeader, infoCard);
         
         return section;
     }
 
-    private Label createHeaderLabel(String text, double width) {
-        Label label = new Label(text);
-        label.setFont(FontLoader.getInter(13));
-        label.setTextFill(Color.rgb(100, 100, 100));
-        label.setStyle("-fx-font-weight: 600;");
-        label.setPrefWidth(width);
-        return label;
-    }
-
-    private HBox createTableRow(String studentName, String courseName, String date) {
-        HBox row = new HBox();
-        row.setSpacing(20);
-        row.setPadding(new Insets(15, 0, 15, 0));
-        row.setStyle("-fx-border-color: #f3f4f6; -fx-border-width: 0 0 1 0;");
+    private VBox createQuickActionCard(String icon, String title, String description) {
+        VBox card = new VBox(StyleConstants.SPACING_SM);
+        card.setAlignment(Pos.TOP_LEFT);
+        card.setPadding(new Insets(StyleConstants.SPACING_LG));
+        card.setStyle(String.format(
+            "-fx-background-color: %s; " +
+            "-fx-border-color: %s; " +
+            "-fx-border-radius: %.0fpx; " +
+            "-fx-background-radius: %.0fpx;",
+            ColorScheme.GRAY_50_HEX,
+            ColorScheme.GRAY_200_HEX,
+            StyleConstants.RADIUS_MD,
+            StyleConstants.RADIUS_MD
+        ));
         
-        Label col1 = createCellLabel(studentName, 250);
-        Label col2 = createCellLabel(courseName, 350);
-        Label col3 = createCellLabel(date, 150);
+        Label iconLabel = new Label(icon);
+        iconLabel.setFont(FontLoader.getOutfit(32));
         
-        row.getChildren().addAll(col1, col2, col3);
+        Label titleLabel = new Label(title);
+        titleLabel.setFont(FontLoader.getOutfitSemiBold(14));
+        titleLabel.setTextFill(ColorScheme.GRAY_900);
+        
+        Label descLabel = new Label(description);
+        descLabel.setFont(FontLoader.getOutfit(12));
+        descLabel.setTextFill(ColorScheme.GRAY_500);
+        descLabel.setWrapText(true);
+        
+        card.getChildren().addAll(iconLabel, titleLabel, descLabel);
         
         // Hover effect
-        row.setOnMouseEntered(e -> row.setStyle(
-            "-fx-background-color: #f9fafb; " +
-            "-fx-border-color: #f3f4f6; " +
-            "-fx-border-width: 0 0 1 0; " +
-            "-fx-cursor: hand;"
-        ));
-        row.setOnMouseExited(e -> row.setStyle(
-            "-fx-border-color: #f3f4f6; " +
-            "-fx-border-width: 0 0 1 0;"
-        ));
+        card.setOnMouseEntered(e -> card.setStyle(String.format(
+            "-fx-background-color: white; " +
+            "-fx-border-color: %s; " +
+            "-fx-border-radius: %.0fpx; " +
+            "-fx-background-radius: %.0fpx; " +
+            "-fx-cursor: hand; " +
+            "-fx-effect: %s;",
+            ColorScheme.BRAND_300_HEX,
+            StyleConstants.RADIUS_MD,
+            StyleConstants.RADIUS_MD,
+            StyleConstants.SHADOW_SM
+        )));
+        card.setOnMouseExited(e -> card.setStyle(String.format(
+            "-fx-background-color: %s; " +
+            "-fx-border-color: %s; " +
+            "-fx-border-radius: %.0fpx; " +
+            "-fx-background-radius: %.0fpx;",
+            ColorScheme.GRAY_50_HEX,
+            ColorScheme.GRAY_200_HEX,
+            StyleConstants.RADIUS_MD,
+            StyleConstants.RADIUS_MD
+        )));
         
-        return row;
-    }
-
-    private Label createCellLabel(String text, double width) {
-        Label label = new Label(text);
-        label.setFont(FontLoader.getInter(14));
-        label.setTextFill(Color.rgb(60, 60, 60));
-        label.setPrefWidth(width);
-        return label;
+        return card;
     }
 }

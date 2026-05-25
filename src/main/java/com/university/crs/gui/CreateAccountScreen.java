@@ -153,11 +153,11 @@ public class CreateAccountScreen {
 
         // Welcome heading
         Label welcome = new Label("Create Student Account");
-        welcome.setFont(FontLoader.getPoppinsBold(28));
+        welcome.setFont(FontLoader.getOutfitBold(28));
         welcome.setTextFill(Color.rgb(26, 26, 26));
 
-        Label subtitle = new Label("Fill in the details to create your account");
-        subtitle.setFont(FontLoader.getInter(13));
+        Label subtitle = new Label("Register as a student - Admin approval required");
+        subtitle.setFont(FontLoader.getOutfit(13));
         subtitle.setTextFill(Color.rgb(120, 120, 120));
 
         VBox headerBox = new VBox(5);
@@ -497,11 +497,12 @@ public class CreateAccountScreen {
             }
             
             // Create student account (role is always STUDENT for this form)
-            userDao.createAccount(username, password, "STUDENT");
-            showMsg(messageLabel, "Account created successfully! Redirecting to login...", true);
+            // Students require admin approval before they can access the system
+            userDao.createAccount(username, password, "STUDENT", fullName, email, department);
+            showMsg(messageLabel, "Account created successfully! Waiting for admin approval. You'll be able to login once approved.", true);
             
             new Thread(() -> {
-                try { Thread.sleep(1500); } catch (InterruptedException ignored) {}
+                try { Thread.sleep(3000); } catch (InterruptedException ignored) {}
                 javafx.application.Platform.runLater(() -> new LoginScreen(stage).show());
             }).start();
         } catch (SQLException e) {
