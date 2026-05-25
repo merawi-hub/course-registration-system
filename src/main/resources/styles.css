@@ -1,0 +1,70 @@
+/* Import Outfit font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+/* Apply Outfit font globally */
+.root {
+    -fx-font-family: 'Outfit', 'Segoe UI', sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #f9fafb;
+}
+
+/* All text elements */
+.label, .text, .text-field, .text-area, .button, .combo-box, .choice-box, .list-view, .table-view {
+    -fx-font-family: 'Outfit', 'Segoe UI', sans-serif;
+}
+
+/* Remove default focus indicators */
+.text-field:focused, .text-area:focused, .combo-box:focused, .button:focused {
+    -fx-background-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Scrollbar styling */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #e4e7ec;
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #d0d5dd;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Table styling */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #e4e7ec;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+}
+
+.table-view .column-header {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #e4e7ec;
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #667085;
+}
+
+.table-view .table-cell {
+    -fx-border-color: #e4e7ec;
+    -fx-font-size: 14px;
+    -fx-text-fill: #101828;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f9fafb;
+}
